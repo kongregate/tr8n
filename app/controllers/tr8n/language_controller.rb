@@ -24,8 +24,8 @@
 module Tr8n
   class LanguageController < Tr8n::BaseController
 
-    before_filter :validate_guest_user, :except => [:select, :switch, :translator_splash_screen, :table]
-    before_filter :validate_current_translator, :except => [:select, :switch, :translator_splash_screen, :table]
+    before_filter :validate_guest_user, :except => [:select, :switch, :translator_splash_screen, :toggle_inline_translations, :change, :table]
+    before_filter :validate_current_translator, :except => [:select, :switch, :translator_splash_screen, :toggle_inline_translations, :change, :table]
     before_filter :validate_language_management, :only => [:index]
     
     # for ssl access to the translator - using ssl_requirement plugin  
@@ -267,6 +267,21 @@ module Tr8n
       end
     
       redirect_to_source
+    end
+
+    # change language from lightbox
+    def change
+      Tr8n::LanguageUser.create_or_touch(tr8n_current_user, Tr8n::Language.find_by_locale(params[:locale]))
+      render(:layout => false)
+    end
+
+    # toggle inline translations popup window
+    def toggle_inline_translations
+      # redirect to login if not a translator
+      unless tr8n_current_user_is_guest?
+        tr8n_current_translator.toggle_inline_translations!
+      end
+      render(:layout => false)
     end
 
     # inline translator popup window as well as translation backend method

@@ -377,12 +377,21 @@ module Tr8n
       site_info[:default_locale]
     end
 
+    def self.default_admin_locale
+      return block_options[:default_admin_locale] if block_options[:default_admin_locale]
+      site_info[:default_admin_locale]
+    end
+
     def self.multiple_base_languages?
-      'en-US' == default_locale
+      self.default_admin_locale == default_locale
     end
 
     def self.default_url
       site_info[:default_url]
+    end
+
+    def self.login_url
+      site_info[:login_url]
     end
 
     def self.current_locale_method
@@ -441,18 +450,9 @@ module Tr8n
     def self.current_user_method
       site_user_info[:current_user_method]
     end
-
-    def self.site_user_info_enabled?
-      site_user_info[:enabled].nil? ? true : site_user_info[:enabled]
-    end
-
-    def self.site_user_info_disabled?
-      !site_user_info_enabled?
-    end
   
     def self.user_class_name
-      return site_user_info[:class_name] if site_user_info_enabled?
-      "Tr8n::Translator"  
+      site_user_info[:class_name]
     end
 
     def self.user_class
@@ -819,5 +819,34 @@ module Tr8n
       synchronization[:push_servers]
     end
     
+    #########################################################
+    # Sharing
+    #########################################################
+    def self.shared_secret
+      config[:sharing][:secret]
+    end
+
+    def self.sign_and_encode_params(params)  
+      payload = Base64.encode64(params.merge(:algorithm => 'HMAC-SHA256', :ts => Time.now.to_i).to_json)
+      sig = OpenSSL::HMAC.digest('sha256', shared_secret, payload)
+      "#{Base64.encode64(sig)}.#{payload}"
+    end
+
+    def self.decode_and_verify_params(signed_request)  
+      encoded_sig, payload = signed_request.split('.', 2)
+      sig = Base64.decode64(encoded_sig)
+
+      data = JSON.parse(Base64.decode64(payload))
+      if data['algorithm'].to_s.upcase != 'HMAC-SHA256'
+        raise Tr8n::Exception.new("Bad signature algorithm: %s" % data['algorithm'])
+      end
+      expected_sig = OpenSSL::HMAC.digest('sha256', shared_secret, payload)
+
+      if expected_sig != sig
+        raise Tr8n::Exception.new("Bad signature")
+      end
+      HashWithIndifferentAccess.new(data)
+    end
+
   end
 end

@@ -37,8 +37,6 @@ class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
   
   def translate
     language = Tr8n::Language.for(params[:language]) || tr8n_current_language
-    source = CGI.unescape(params[:source] || "API") 
-    
     return sanitize_api_response(translate_phrase(language, params, {:source => source, :api => :translate})) if params[:label]
     
     # API signature
@@ -64,15 +62,11 @@ class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
       
       translations = []
       Tr8n::TranslationKey.find(:all, :conditions => conditions).each_with_index do |tkey, index|
-        trn = tkey.translate(language, {}, {:api => true, :api => :cache})
+        trn = tkey.translate(language, {}, {:source => source, :url => source, :api => :cache})
         translations << trn 
       end
       
-      if params[:sdk_jsvar]
-        return render(:text => "#{params[:sdk_jsvar]}.updateTranslations(#{translations.to_json});", :content_type => "text/javascript")
-      end 
-      
-      return sanitize_api_response({:phrases => translations, :api => :translate})
+      return sanitize_api_response({:phrases => translations})
     elsif params[:phrases]
       
       phrases = []
@@ -81,13 +75,13 @@ class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
       rescue Exception => ex
         return sanitize_api_response({"error" => "Invalid request. JSON parsing failed: #{ex.message}"})
       end
-      
+
       translations = []
       phrases.each do |phrase|
         phrase = {:label => phrase} if phrase.is_a?(String)
-        translations << translate_phrase(language, phrase, {:source => source, :api => :translate})
+        translations << translate_phrase(language, phrase, {:source => source, :url => source, :api => :translate})
       end
-      
+
       return sanitize_api_response({:phrases => translations})    
     end
     
@@ -97,7 +91,7 @@ class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
   end
 
 private
-  
+
   def translate_phrase(language, phrase, opts = {})
     return "" if phrase[:label].strip.blank?
     language.translate(phrase[:label], phrase[:description], {}, opts)
