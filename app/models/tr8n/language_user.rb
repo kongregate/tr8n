@@ -44,7 +44,7 @@
 #++
 
 class Tr8n::LanguageUser < ActiveRecord::Base
-  set_table_name :tr8n_language_users
+  self.table_name = :tr8n_language_users
 
   attr_accessible :language_id, :user_id, :translator_id, :manager
   attr_accessible :language, :translator, :user
@@ -74,7 +74,7 @@ class Tr8n::LanguageUser < ActiveRecord::Base
   end
 
   def self.create_or_touch(user, language)
-    return unless user.id
+    return if Tr8n::Config.guest_user?(user)
     lu = Tr8n::LanguageUser.find_or_create(user, language)
     lu.touch
     lu

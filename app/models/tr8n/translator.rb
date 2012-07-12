@@ -57,7 +57,7 @@
 #++
 
 class Tr8n::Translator < ActiveRecord::Base
-  set_table_name :tr8n_translators
+  self.table_name = :tr8n_translators
 
   attr_accessible :user_id, :inline_mode, :blocked, :reported, :fallback_language_id, :rank, :name, :gender, :email, :password, :mugshot, :link, :locale, :level, :manager, :last_ip, :country_code, :remote_id
   attr_accessible :user
@@ -169,6 +169,10 @@ class Tr8n::Translator < ActiveRecord::Base
     Tr8n::TranslatorLog.log(self, :disabled_inline_translations, Tr8n::Config.current_language.id)
   end
 
+  def toggle_inline_translations!
+    inline_mode ? disable_inline_translations! : enable_inline_translations!
+  end
+
   def switched_language!(language)
     lu = Tr8n::LanguageUser.create_or_touch(user || self, language)
     lu.update_attributes(:translator_id => self.id) unless lu.translator
@@ -237,7 +241,6 @@ class Tr8n::Translator < ActiveRecord::Base
   
   # all admins are always manager for all languages
   def manager?
-    return true unless Tr8n::Config.site_user_info_enabled?
     return true if Tr8n::Config.admin_user?(user)
     return true if level >= Tr8n::Config.manager_level
     false
@@ -264,12 +267,6 @@ class Tr8n::Translator < ActiveRecord::Base
   def name
     return "Tr8n Network" if system?
     return super if remote?
-    
-    unless Tr8n::Config.site_user_info_enabled?
-      translator_name = super
-      return translator_name unless translator_name.blank?
-      return "No Name"
-    end  
 
     return "Deleted User" unless user
     user_name = Tr8n::Config.user_name(user)
@@ -282,12 +279,6 @@ class Tr8n::Translator < ActiveRecord::Base
     return "unknown" if system?
     return super if remote?
     
-    unless Tr8n::Config.site_user_info_enabled?
-      translator_gender = super
-      return translator_gender unless translator_gender.blank?
-      return "unknown"
-    end  
-
     Tr8n::Config.user_gender(user)
   end
 
@@ -295,7 +286,6 @@ class Tr8n::Translator < ActiveRecord::Base
   def mugshot
     return Tr8n::Config.system_image if system?
     return super if remote?
-    return super unless Tr8n::Config.site_user_info_enabled?
     return Tr8n::Config.silhouette_image unless user
     img_url = Tr8n::Config.user_mugshot(user)
     return Tr8n::Config.silhouette_image if img_url.blank?
@@ -305,22 +295,17 @@ class Tr8n::Translator < ActiveRecord::Base
   # TODO: change db to link_url
   def link
     # return super if remote? 
-    return super unless Tr8n::Config.site_user_info_enabled?
     return Tr8n::Config.default_url unless user
     Tr8n::Config.user_link(user)
   end
 
   def admin?
     # stand alone translators are always admins
-    return true unless Tr8n::Config.site_user_info_enabled?
-    
     return false unless user
     Tr8n::Config.admin_user?(user)
   end  
 
   def guest?
-    return id.nil? unless Tr8n::Config.site_user_info_enabled?
-
     return true unless user
     Tr8n::Config.guest_user?(user)
   end  
