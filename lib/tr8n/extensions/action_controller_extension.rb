@@ -71,12 +71,14 @@ module Tr8n
 
       def tr8n_init_current_locale
         eval(Tr8n::Config.current_locale_method)
-      rescue
-        # fallback to the default session based locale implementation
-        # choose the first language from the accepted languages header
-        session[:locale] = tr8n_user_preffered_locale unless session[:locale]
-        session[:locale] = params[:locale] if params[:locale]
-        session[:locale]
+      
+      # Kongregate:AG - for our needs we'll just comment out, but if we push this back, should only fall back if locale method is not specified
+      # rescue
+      #   # fallback to the default session based locale implementation
+      #   # choose the first language from the accepted languages header
+      #   session[:locale] = tr8n_user_preffered_locale unless session[:locale]
+      #   session[:locale] = params[:locale] if params[:locale]
+      #   session[:locale]
       end
 
       def tr8n_init_current_user
