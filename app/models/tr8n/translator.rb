@@ -103,6 +103,8 @@ class Tr8n::Translator < ActiveRecord::Base
   end
 
   def self.register(user = Tr8n::Config.current_user)
+    return nil unless Tr8n::Config.open_registration_mode?
+
     translator = Tr8n::Translator.find_or_create(user)
     return unless translator
 

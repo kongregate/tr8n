@@ -252,7 +252,7 @@ module Tr8n
       elsif language_action == "become_translator" # non-translator mode
         Tr8n::Translator.register
       elsif language_action == "enable_inline_mode" or language_action == "toggle_inline_mode" # non-translator mode
-        Tr8n::Translator.register.enable_inline_translations!
+        Tr8n::Translator.register.try(:enable_inline_translations!)
       end
     
       redirect_to_source
