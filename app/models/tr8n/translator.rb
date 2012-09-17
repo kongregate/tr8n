@@ -60,7 +60,9 @@ class Tr8n::Translator < ActiveRecord::Base
 
   def self.register(user = Tr8n::Config.current_user)
     return unless user
-    
+
+    return nil unless Tr8n::Config.open_registration_mode?
+
     translator = Tr8n::Translator.find_or_create(user)
     Tr8n::LanguageUser.find(:all, :conditions => ["user_id = ?", user.id]).each do |lu|
       lu.update_attributes(:translator => translator)
