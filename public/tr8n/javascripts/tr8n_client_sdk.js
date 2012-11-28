@@ -61,8 +61,10 @@ Tr8n.Proxy = function(options) {
     'proxy': self
 	});
 	
-	this.initTranslations();
-	this.runScheduledTasks();
+  this.initTranslations();
+  if (!this.options['dont_run_scheduled_tasks']) {
+    this.runScheduledTasks();
+  }
 }
 
 Tr8n.Proxy.prototype = {
