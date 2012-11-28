@@ -21,7 +21,9 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Tr8n::BaseFilter < Wf::Filter
+require 'will_filter'
+
+class Tr8n::BaseFilter < WillFilter::Filter
 
   def definition
     meta = super
