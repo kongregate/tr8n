@@ -24,16 +24,16 @@
 class Tr8n::Api::V1::BaseController < ApplicationController
   unloadable
 
-  if Tr8n::Config.api_skip_before_filters.any?
-    skip_before_filter *Tr8n::Config.api_skip_before_filters
+  if Tr8n::Config.skip_before_filters.any?
+    skip_before_filter *Tr8n::Config.skip_before_filters
   end
 
-  if Tr8n::Config.api_before_filters.any?
-    before_filter *Tr8n::Config.api_before_filters
+  if Tr8n::Config.before_filters.any?
+    before_filter *Tr8n::Config.before_filters
   end
 
-  if Tr8n::Config.api_after_filters.any?
-    after_filter *Tr8n::Config.api_after_filters
+  if Tr8n::Config.after_filters.any?
+    after_filter *Tr8n::Config.after_filters
   end
 
 private
