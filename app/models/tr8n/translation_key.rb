@@ -251,10 +251,8 @@ class Tr8n::TranslationKey < ActiveRecord::Base
   
   # returns only the translations that meet the minimum rank
   def valid_translations_for(language)
-    Tr8n::LocalTranslationCache.fetch(self, language) do
-      Tr8n::Cache.fetch("translations_#{language.locale}_#{self.key}") do
-        translations_for(language, Tr8n::Config.translation_threshold)
-      end
+    Tr8n::Cache.fetch("translations_#{language.locale}_#{self.key}") do
+      translations_for(language, Tr8n::Config.translation_threshold)
     end
   end
   
