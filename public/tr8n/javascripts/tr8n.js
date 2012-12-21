@@ -502,7 +502,7 @@ Tr8n.LanguageSelector.prototype = {
     }
     this.container.style.display  = "block";
 
-    var trigger             = Tr8n.element('tr8n_language_selector_trigger');
+    var trigger             = Tr8n.element('tr8n_language_selector_trigger') || document.body;
     var trigger_position    = Tr8n.Utils.cumulativeOffset(trigger);
     var container_position  = {
       left: trigger_position[0] + trigger.offsetWidth - this.container.offsetWidth + 'px',
@@ -775,11 +775,11 @@ Tr8n.Utils = {
 
   cumulativeOffset: function(element) {
     var valueT = 0, valueL = 0;
-    while (element) {
+    do {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
       element = element.offsetParent;
-    }
+    } while (element);
     return [valueL, valueT];
   },
 
