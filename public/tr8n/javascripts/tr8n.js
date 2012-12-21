@@ -775,11 +775,11 @@ Tr8n.Utils = {
 
   cumulativeOffset: function(element) {
     var valueT = 0, valueL = 0;
-    do {
+    while (element) {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
       element = element.offsetParent;
-    } while (element);
+    }
     return [valueL, valueT];
   },
 
