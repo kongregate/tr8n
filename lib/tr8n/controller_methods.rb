@@ -66,15 +66,7 @@ module Tr8n::ControllerMethods
   def init_tr8n
     tr8n_current_locale = nil
     
-    begin
-      tr8n_current_locale = eval(Tr8n::Config.current_locale_method)
-    rescue Exception => ex
-      # fallback to the default session based locale implementation
-      # choose the first language from the accepted languages header
-      session[:locale] = tr8n_user_preffered_locale unless session[:locale]
-      session[:locale] = params[:locale] if params[:locale]
-      tr8n_current_locale = session[:locale]
-    end
+    tr8n_current_locale = eval(Tr8n::Config.current_locale_method)
     
     tr8n_current_user = nil
     if Tr8n::Config.site_user_info_enabled? 
