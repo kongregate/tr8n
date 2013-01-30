@@ -55,7 +55,7 @@ class Tr8n::TranslationSource < ActiveRecord::Base
 
     translation_domain = Tr8n::TranslationDomain.find_or_create(url)
     Tr8n::Cache.fetch("translation_source_#{translation_domain.id}_#{source_name}") do
-      find_or_create(source_name, translation_domain)
+      find_or_create(source_name, url)
     end
   end
 
