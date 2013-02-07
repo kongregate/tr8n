@@ -1065,6 +1065,7 @@ Tr8n.Proxy.Utils = {
     request.open(options.method, url, true);
     request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     request.setRequestHeader('Accept', 'text/javascript, text/html, application/xml, text/xml, */*');
+    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     request.send(options.parameters);
   }	
 }
