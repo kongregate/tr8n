@@ -72,7 +72,7 @@ module Tr8n::ControllerMethods
     if Tr8n::Config.site_user_info_enabled? 
       begin
         tr8n_current_user = eval(Tr8n::Config.current_user_method)
-        tr8n_current_user = nil if tr8n_current_user.class.name != Tr8n::Config.user_class_name
+        tr8n_current_user = nil unless tr8n_current_user.kind_of? Tr8n::Config.user_class_name.constantize
       rescue Exception => ex
         tr8n_current_user = Tr8n::Translator.new
         Tr8n::Logger.error("Site user integration is enabled, but #{Tr8n::Config.current_user_method} method is not defined")
