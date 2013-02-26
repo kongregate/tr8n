@@ -174,7 +174,7 @@ Tr8n.Proxy.prototype = {
 			if (phrases!="[") phrases = phrases + ",";
       phrases = phrases + "{";
 			phrases = phrases + '"label":"' + translation_key.label + '", ';
-      phrases = phrases + '"description":"' + translation_key.description + '"';
+      phrases = phrases + '"description":"' + (translation_key.description || '') + '"';
       phrases = phrases + "}";
 		}
 		phrases = phrases + "]";
