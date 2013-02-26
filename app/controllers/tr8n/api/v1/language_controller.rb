@@ -43,7 +43,7 @@ class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
 
 #   return sanitize_api_response({"error" => "You must be logged in to use the api"}) if tr8n_current_user_is_guest?
 
-    language = if params[:language] ? Tr8n::Language.for(params[:language]) : tr8n_current_language
+    language = params[:language] ? Tr8n::Language.for(params[:language]) : tr8n_current_language
     if params[:source].blank?
       source = "API"
     else
