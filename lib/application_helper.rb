@@ -57,7 +57,7 @@ module ApplicationHelper
     client_sdk_var_name = opts[:client_var_name] || :tr8nProxy
 
     default_source_url = "#{controller.controller_name}/#{controller.action_name}.js"
-    source = Tr8n::TranslationSource.find_or_create(opts[:source] || default_source_url)
+    source = Tr8n::TranslationSource.for(opts[:source] || default_source_url, request.url)
 
     if Tr8n::Config.enable_browser_cache?
       # translations are loaded through a script
