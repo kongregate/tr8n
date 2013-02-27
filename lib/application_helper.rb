@@ -22,7 +22,65 @@
 #++
 
 module ApplicationHelper
-  
+
+  def tr8n_style_attribute_tag(attr_name = 'float', default = 'right', lang = Tr8n::Config.current_language)
+    "#{attr_name}:#{lang.align(default)}".html_safe
+  end
+
+  def tr8n_client_sdk_tag(opts = {})
+    # opts[:default_source]           ||= tr8n_default_client_source
+    opts[:scheduler_interval]       ||= Tr8n::Config.default_client_interval
+
+    opts[:enable_inline_translations] = (Tr8n::Config.current_user_is_translator? and Tr8n::Config.current_translator.enable_inline_translations? and (not Tr8n::Config.current_language.default?))
+    opts[:default_decorations]        = Tr8n::Config.default_decoration_tokens
+    opts[:default_tokens]             = Tr8n::Config.default_data_tokens
+
+    opts[:rules]                      = {
+      :number => Tr8n::Config.rules_engine[:numeric_rule],
+      :gender => Tr8n::Config.rules_engine[:gender_rule],
+      :list   => Tr8n::Config.rules_engine[:gender_list_rule],
+      :date   => Tr8n::Config.rules_engine[:date_rule]
+    }
+
+    # build a list of actual rules of the language
+
+    client_var_name = opts[:client_var_name] || :tr8nProxy
+    opts.merge!(:enable_tml => Tr8n::Config.enable_tml?)
+
+    "<script>Tr8n.SDK.Proxy.init(#{opts.to_json});</script>".html_safe
+  end
+
+  def tr8n_translations_cache_tag(opts = {})
+    html = []
+
+    opts[:translations_element_id] ||= :tr8n_translations
+    client_sdk_var_name = opts[:client_var_name] || :tr8nProxy
+
+    default_source_url = "#{controller.controller_name}/#{controller.action_name}.js"
+    source = Tr8n::TranslationSource.find_or_create(opts[:source] || default_source_url)
+
+    if Tr8n::Config.enable_browser_cache?
+      # translations are loaded through a script
+      js_source = "/tr8n/api/v1/language/translate.js?cache=true&callback=Tr8n.SDK.Proxy.registerTranslationKeys&source=#{CGI.escape(source.source)}&t=#{source.updated_at.to_i}"
+      html << "<script type='text/javascript' src='#{js_source}'></script>"
+    else
+      # translations are embedded right into the page
+      html << "<script>"
+
+      keys = Tr8n::TranslationKey.where(["(id in (select distinct(translation_key_id) from tr8n_translation_key_sources where translation_source_id = ?))", source.id])
+      translations = []
+      keys.each_with_index do |tkey, index|
+        trn = tkey.translate(Tr8n::Config.current_language, {}, {:api => true})
+        translations << trn
+      end
+
+      html << "Tr8n.SDK.Proxy.registerTranslationKeys(#{translations.to_json});"
+      html << "</script>"
+    end
+
+    html.join('').html_safe
+  end
+
   # generates translations json for client sdk
   def tr8n_translations_js_tag(opts = {})
     html = []
