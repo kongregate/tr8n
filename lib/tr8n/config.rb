@@ -715,5 +715,16 @@ class Tr8n::Config
   def self.enable_client_sdk?
     config[:enable_client_sdk]
   end
-  
+
+  def self.enable_browser_cache?
+    config[:enable_browser_cache]
+  end
+
+  def self.enable_tml?
+    config[:enable_tml]
+  end
+
+  def self.default_client_interval
+    5000
+  end
 end
