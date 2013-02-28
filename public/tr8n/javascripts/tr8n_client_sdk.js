@@ -206,16 +206,17 @@ Tr8n.Proxy.prototype = {
        this.translations[translation_key_data.key] = translation_key_data;
        var missing_key_data = this.missing_translation_keys[translation_key_data.key];
        var tr8nElement = Tr8n.element(translation_key_data.key);
-      
-       if (tr8nElement && missing_key_data.translation_key) {
-	       tr8nElement.innerHTML = missing_key_data.translation_key.translate(this.language, missing_key_data.token_values, {skip_decorations:true});
+
+       if (tr8nElement && missing_key_data && missing_key_data.translation_key) {
+         tr8nElement.innerHTML = missing_key_data.translation_key.translate(this.language, missing_key_data.token_values, {skip_decorations:true});
          tr8nElement.setAttribute('translation_key_id', translation_key_data['id']);
+
          if (this.inline_translations_enabled) {
-		 	      tr8nElement.className = 'tr8n_translatable tr8n_not_translated';
-		     }
+           tr8nElement.className = 'tr8n_translatable tr8n_not_translated';
+         }
+
+         delete this.missing_translation_keys[missing_key_data.translation_key.key];
        }
-       
-       delete this.missing_translation_keys[missing_key_data.translation_key.key];
     }
 		this.missing_translations_locked = false;
   },	

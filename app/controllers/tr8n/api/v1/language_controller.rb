@@ -106,7 +106,12 @@ private
   
   def translate_phrase(language, phrase, opts = {})
     return "" if phrase[:label].strip.blank?
-    language.translate(phrase[:label], phrase[:description], {}, {:api => true, :source => opts[:source]})
+
+    if language.default?
+      {key: Digest::MD5.hexdigest("#{phrase[:label]};;;#{phrase[:description]}"), label: phrase[:label], original: true}
+    else
+      language.translate(phrase[:label], phrase[:description], {}, {:api => true, :source => opts[:source]})
+    end
   end
   
 end
