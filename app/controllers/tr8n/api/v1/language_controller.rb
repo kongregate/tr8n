@@ -56,7 +56,7 @@ class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
     # {:source => "", :language => "", :phrases => [{:label => ""}]}
     
     # get all phrases for the specified source
-    if params[:batch] == "true"
+    if params[:batch] == "true" or params[:cache] == "true"
       if params[:sources].blank? and params[:source].blank?
         return sanitize_api_response({"error" => "No source/sources have been provided for the batch request."})
       end
