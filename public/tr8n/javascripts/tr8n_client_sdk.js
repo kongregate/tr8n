@@ -215,6 +215,9 @@ Tr8n.Proxy.prototype = {
            tr8nElement.className = 'tr8n_translatable tr8n_not_translated';
          }
 
+       }
+
+       if (missing_key_data && missing_key_data.translation_key) {
          delete this.missing_translation_keys[missing_key_data.translation_key.key];
        }
     }
