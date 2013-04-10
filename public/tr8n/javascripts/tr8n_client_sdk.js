@@ -232,7 +232,7 @@ Tr8n.Proxy.prototype = {
 		window.setTimeout(function() {
 			self.runScheduledTasks();
 		}, this.options['scheduler_interval']);
-  },
+  }
 }
 
 /****************************************************************************
