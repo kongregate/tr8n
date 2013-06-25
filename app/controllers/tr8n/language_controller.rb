@@ -24,6 +24,7 @@
 module Tr8n
   class LanguageController < Tr8n::BaseController
 
+    skip_before_filter :validate_current_user, only: [:switch]
     before_filter :validate_current_translator, :except => [:select, :switch]
     before_filter :validate_language_management, :only => [:index]
     
