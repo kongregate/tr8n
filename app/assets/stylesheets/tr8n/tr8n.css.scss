@@ -246,8 +246,8 @@
 .tr8n_translator .tokens_container             {padding-top:10px; font-size:10px; padding-bottom:5px; border-bottom:dotted 1px #ccc;}
 .tr8n_translator .buttons_container            {padding-top:10px; padding-bottom:15px;text-align:center;}
   
-.translator_btn                                 {position:relative;border:0;padding:0;margin:0 2px 0 -2px;cursor:pointer;overflow:visible;background:transparent url('/assets/tr8n/site_sprite.gif') no-repeat right -100px;font-size:11px;font-weight:bold;text-align:center;font-family:Arial;vertical-align:middle;}
-.translator_btn span                            {position:relative;display:block;white-space:nowrap;background:transparent url('/assets/tr8n/site_sprite.gif') no-repeat left top;}
+.translator_btn                                 {position:relative;border:0;padding:0;margin:0 2px 0 -2px;cursor:pointer;overflow:visible;background:transparent image-url('tr8n/site_sprite.gif') no-repeat right -100px;font-size:11px;font-weight:bold;text-align:center;font-family:Arial;vertical-align:middle;}
+.translator_btn span                            {position:relative;display:block;white-space:nowrap;background:transparent image-url('tr8n/site_sprite.gif') no-repeat left top;}
 button::-moz-focus-inner                        {border:none;}
 .translator_submit_btn                          {padding:0 10px 0 0;background-position:right -35px;}
 .translator_submit_btn span                     {padding:0px 0 0px 10px;line-height:30px;height:30px;background-position:left 0;color:#fff;font-size:14px;}
@@ -381,16 +381,16 @@ button::-moz-focus-inner                        {border:none;}
 .translations_tab_nav li a                {display:block;padding:6px 0px 6px 10px; outline:none;}
 
 .translations_tabs                        {margin-left:5px;zoom:1}
-.translations_tabs li                     {background: url('/assets/tr8n/site_sprite.gif') no-repeat right -255px;font-size:12px;font-weight:bold;margin:0;position:relative;z-index:1}
+.translations_tabs li                     {background: image-url('tr8n/site_sprite.gif') no-repeat right -255px;font-size:12px;font-weight:bold;margin:0;position:relative;z-index:1}
 .translations_tabs li a                   {padding:13px 30px 6px 6px;color:#1166bb;cursor:pointer;text-decoration:none;line-height:14px;}
 .translations_tabs li a:hover             {text-decoration:none}
 .translations_tabs li.current             {margin-left: -30px;background-position:right -360px;z-index:2}
-.translations_tabs li.current a           {padding-left:30px;background: url('/assets/tr8n/site_sprite.gif') no-repeat left -325px;color: #333;font-size:13px;}
+.translations_tabs li.current a           {padding-left:30px;background: image-url('tr8n/site_sprite.gif') no-repeat left -325px;color: #333;font-size:13px;}
 .translations_tabs li.last                {background-position:right -290px;}
 .translations_tabs li.last a              {padding-right:30px;}
 .translations_tabs li.last_current        {margin-left: -25px;background-position:right -430px;}
 .translations_tabs li.last_current a      {padding-left:30px;color: #000;}
-.translations_tabs li.first a             {padding-left:30px;background:url('/assets/tr8n/site_sprite.gif') no-repeat 0 -220px;}
+.translations_tabs li.first a             {padding-left:30px;background:image-url('tr8n/site_sprite.gif') no-repeat 0 -220px;}
 .translations_tabs li.first_current       {margin:0}
 .translations_tabs li.first_current a     {background-position:0 -395px;color: #000;}
 
@@ -415,13 +415,13 @@ button::-moz-focus-inner                        {border:none;}
 /****************************************/
 
 .tr8n_pcb {
-	background: url('/assets/tr8n/buttons.png') no-repeat; 
+	background: image-url('tr8n/buttons.png') no-repeat;
 	height: 23px; 
 	line-height: 23px; 
 	padding: 3px 0 7px 0; 
 
 	span {
-		background: url('/assets/tr8n/buttons.png') no-repeat; 
+		background: image-url('tr8n/buttons.png') no-repeat;
 		height: 23px; 
 		line-height: 23px; 
 		padding: 3px 0 7px 0; 

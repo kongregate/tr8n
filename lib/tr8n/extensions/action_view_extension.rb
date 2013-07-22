@@ -399,7 +399,7 @@ module Tr8n
         sections.each do |section|
           html << "<li class='section_list_item'>" 
           html << "<a href='/tr8n/phrases/index?section_key=#{section.key}'>" << tr(section.label, section.description) << "</a>"
-          html << "<a href='" << section.data[:link] << "' target='_new'><img src='/assets/tr8n/bullet_go.png' style='border:0px; vertical-align:middle'></a>" if section.data[:link]
+          html << "<a href='" << section.data[:link] << "' target='_new'><img src='#{asset_path('tr8n/bullet_go.png')}' style='border:0px; vertical-align:middle'></a>" if section.data[:link]
 
           if section.children.size > 0
             html << generate_sitemap(section.children, options)

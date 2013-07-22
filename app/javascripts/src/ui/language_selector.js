@@ -64,8 +64,8 @@ Tr8n.LanguageSelector.prototype = {
         html += splash_screen.innerHTML;
       } else {
         html += "<div style='font-size:18px;text-align:center; margin:5px; padding:10px; background-color:black;'>";
-        html += "  <img src='/assets/tr8n/tr8n_logo.jpg' style='width:280px; vertical-align:middle;'>";
-        html += "  <img src='/assets/tr8n/loading3.gif' style='width:200px; height:20px; vertical-align:middle;'>";
+        html += "  <img src='"+Tr8n.assets_path+"/tr8n/tr8n_logo.jpg' style='width:280px; vertical-align:middle;'>";
+        html += "  <img src='"+Tr8n.assets_path+"/tr8n/loading3.gif' style='width:200px; height:20px; vertical-align:middle;'>";
         html += "</div>";
       }
       this.container.innerHTML = html;

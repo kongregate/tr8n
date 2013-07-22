@@ -532,11 +532,11 @@ module Tr8n
     end
   
     def self.silhouette_image
-      "/assets/tr8n/photo_silhouette.gif"
+      asset_path("tr8n/photo_silhouette.gif")
     end
 
     def self.system_image
-      "/assets/tr8n/photo_system.gif"
+      asset_path("tr8n/photo_system.gif")
     end
   
     #########################################################
