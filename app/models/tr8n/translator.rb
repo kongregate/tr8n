@@ -83,7 +83,7 @@ class Tr8n::Translator < ActiveRecord::Base
   end
 
   def cache_key
-    self.class.cache_key(key)
+    self.class.cache_key(user_id)
   end
 
   def self.for(user)
