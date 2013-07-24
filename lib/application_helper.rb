@@ -52,7 +52,15 @@ module ApplicationHelper
     html << "</script>"
     html.join('').html_safe
   end
+
+  def pig(word)
+    word + 'wayway'
+  end
   
+  def pig_string(s)
+    s.split.collect{|w| pig(w)}.join(' ')
+  end
+
   # translation functions
   def tr(label, desc = "", tokens = {}, options = {})
     if desc.is_a?(Hash)
@@ -78,6 +86,12 @@ module ApplicationHelper
 
 #     pp [source, options[:source], url]
     
+    if(true)
+      s = Tr8n::TranslationKey.substitute_tokens(label, tokens, options).html_safe
+      s = pig_string(s).html_safe
+      return s
+    end
+
     if(!Tr8n::Config.enabled? || Tr8n::Config.current_language==Tr8n::Config.default_language)
       return Tr8n::TranslationKey.substitute_tokens(label, tokens, options).html_safe
     end
