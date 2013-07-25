@@ -86,7 +86,7 @@ module ApplicationHelper
 
 #     pp [source, options[:source], url]
     
-    if(true)
+    if(Tr8n::Config.current_language && Tr8n::Config.current_language.english_name.downcase == "pig latin")
       s = Tr8n::TranslationKey.substitute_tokens(label, tokens, options).html_safe
       s = pig_string(s).html_safe
       return s
