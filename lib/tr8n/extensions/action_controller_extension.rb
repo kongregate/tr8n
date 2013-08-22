@@ -98,7 +98,8 @@ module Tr8n
         Tr8n::Config.init(tr8n_init_current_locale, tr8n_init_current_user, tr8n_init_current_source)
         
         # invalidate source for the current page
-        Tr8n::Cache.invalidate_source(Tr8n::Config.current_source)
+        # ACTUALLY... LET'S NOT! This query happens way too much and overloads our database
+        # Tr8n::Cache.invalidate_source(Tr8n::Config.current_source)
 
         # track user's last ip address  
         if Tr8n::Config.enable_country_tracking? and Tr8n::Config.current_user_is_translator?
