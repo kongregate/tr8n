@@ -47,31 +47,32 @@ class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
     # get all phrases for the specified source 
     # this can be used by a parallel application or a JavaScript Client SDK that needs to build a page cache
     if params[:batch] == "true" or params[:cache] == "true"
+
       if params[:sources].blank? and params[:source].blank?
         return sanitize_api_response({"error" => "No source/sources have been provided for the batch request."})
       end
-      
+
       source_names = params[:sources] || [params[:source]]
-      sources = Tr8n::TranslationSource.find(:all, :conditions => ["source in (?)", source_names])
-      source_ids = sources.collect{|source| source.id}
-      
-      if source_ids.empty?
-        conditions = ["1=2"]
-      else
-        conditions = ["(id in (select distinct(translation_key_id) from tr8n_translation_key_sources where translation_source_id in (?)))"]
-        conditions << source_ids.uniq
+      translations = Tr8n::Cache.fetch("tr8n:api:v1:languages:translate:#{language.id}:#{source_names.join('-')}") do
+        sources = Tr8n::TranslationSource.find(:all, :conditions => ["source in (?)", source_names])
+        source_ids = sources.collect{|source| source.id}
+
+        if source_ids.empty?
+          conditions = ["1=2"]
+        else
+          conditions = ["(id in (select distinct(translation_key_id) from tr8n_translation_key_sources where translation_source_id in (?)))"]
+          conditions << source_ids.uniq
+        end
+
+        Tr8n::TranslationKey.find(:all, :conditions => conditions).map do |tkey|
+          tkey.translate(language, {}, {:api => true, :api => :cache})
+        end
       end
-      
-      translations = []
-      Tr8n::TranslationKey.find(:all, :conditions => conditions).each_with_index do |tkey, index|
-        trn = tkey.translate(language, {}, {:api => true, :api => :cache})
-        translations << trn 
-      end
-      
+
       if params[:sdk_jsvar]
         return render(:text => "#{params[:sdk_jsvar]}.updateTranslations(#{translations.to_json});", :content_type => "text/javascript")
-      end 
-      
+      end
+
       return sanitize_api_response({:phrases => translations, :api => :translate})
     elsif params[:phrases]
       
