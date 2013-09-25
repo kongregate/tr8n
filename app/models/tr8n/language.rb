@@ -74,8 +74,9 @@ class Tr8n::Language < ActiveRecord::Base
   
   def self.for(locale)
     return nil if locale.nil?
-    Tr8n::Cache.fetch(cache_key(locale)) do 
-      find_by_locale(locale)
+    Tr8n::Cache.fetch(cache_key(locale)) do
+      # attempt to find by country if locale record doesn't exist
+      find_by_locale(locale) || find_by_locale(locale[0,2])
     end
   end
 
