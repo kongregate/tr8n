@@ -532,11 +532,11 @@ module Tr8n
     end
   
     def self.silhouette_image
-      asset_path("tr8n/photo_silhouette.gif")
+      Rails.application.config.assets.prefix + "/tr8n/photo_silhouette.gif"
     end
 
     def self.system_image
-      asset_path("tr8n/photo_system.gif")
+      Rails.application.config.assets.prefix + "/tr8n/photo_system.gif"
     end
   
     #########################################################
