@@ -47,9 +47,6 @@
 class Tr8n::LanguageCase < ActiveRecord::Base
   self.table_name = :tr8n_language_cases
 
-  attr_accessible :language_id, :translator_id, :keyword, :latin_name, :native_name, :description, :application
-  attr_accessible :language, :translator
-
   after_save :clear_cache
   after_destroy :clear_cache
 

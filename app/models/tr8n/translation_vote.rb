@@ -42,9 +42,6 @@
 class Tr8n::TranslationVote < ActiveRecord::Base
   self.table_name = :tr8n_translation_votes
 
-  attr_accessible :translation_id, :translator_id, :vote
-  attr_accessible :translation, :translator
-
   belongs_to :translation,  :class_name => "Tr8n::Translation"
   belongs_to :translator,   :class_name => "Tr8n::Translator"
 

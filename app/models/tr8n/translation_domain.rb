@@ -41,8 +41,6 @@
 class Tr8n::TranslationDomain < ActiveRecord::Base
   self.table_name = :tr8n_translation_domains
 
-  attr_accessible :name, :description, :source_count
-
   after_save      :clear_cache
   after_destroy   :clear_cache
 

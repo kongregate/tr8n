@@ -48,9 +48,6 @@
 class Tr8n::Translation < ActiveRecord::Base
   self.table_name = :tr8n_translations
 
-  attr_accessible :translation_key_id, :language_id, :translator_id, :label, :rank, :approved_by_id, :rules, :synced_at
-  attr_accessible :language, :translator, :translation_key
-
   after_save      :update_cache
   after_destroy   :update_cache
 
