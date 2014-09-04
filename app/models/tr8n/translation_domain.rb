@@ -26,11 +26,11 @@
 # Table name: tr8n_translation_domains
 #
 #  id              INTEGER         not null, primary key
-#  name            varchar(255)    
-#  description     varchar(255)    
+#  name            varchar(255)
+#  description     varchar(255)
 #  source_count    integer         default = 0
-#  created_at      datetime        
-#  updated_at      datetime        
+#  created_at      datetime
+#  updated_at      datetime
 #
 # Indexes
 #
@@ -45,15 +45,15 @@ class Tr8n::TranslationDomain < ActiveRecord::Base
 
   after_save      :clear_cache
   after_destroy   :clear_cache
-  
+
   has_many    :translation_sources,       :class_name => "Tr8n::TranslationSource",     :dependent => :destroy
   has_many    :translation_key_sources,   :class_name => "Tr8n::TranslationKeySource",  :through => :translation_sources
   has_many    :translation_keys,          :class_name => "Tr8n::TranslationKey",        :through => :translation_key_sources
-  
+
   alias :sources      :translation_sources
   alias :key_sources  :translation_key_sources
   alias :keys         :translation_keys
-  
+
   def self.cache_key(domain_name)
     "translation_domain_#{domain_name}"
   end
@@ -61,16 +61,16 @@ class Tr8n::TranslationDomain < ActiveRecord::Base
   def cache_key
     self.class.cache_key(name)
   end
-  
+
   def self.find_or_create(url = nil)
     domain_name = URI.parse(url || 'localhost').host || 'localhost'
-    Tr8n::Cache.fetch(cache_key(domain_name)) do 
+    Tr8n::Cache.fetch(cache_key(domain_name)) do
       find_by_name(domain_name) || create(:name => domain_name)
-    end  
+    end
   end
-  
+
   def clear_cache
     Tr8n::Cache.delete(cache_key)
   end
-  
+
 end

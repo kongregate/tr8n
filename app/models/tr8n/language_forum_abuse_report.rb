@@ -29,15 +29,15 @@
 #  language_id                  integer         not null
 #  translator_id                integer         not null
 #  language_forum_message_id    integer         not null
-#  reason                       varchar(255)    
-#  created_at                   datetime        
-#  updated_at                   datetime        
+#  reason                       varchar(255)
+#  created_at                   datetime
+#  updated_at                   datetime
 #
 # Indexes
 #
-#  tr8n_forum_reports_message_id               (language_forum_message_id) 
-#  tr8n_forum_reports_lang_id_translator_id    (language_id, translator_id) 
-#  tr8n_forum_reports_lang_id                  (language_id) 
+#  tr8n_forum_reports_message_id               (language_forum_message_id)
+#  tr8n_forum_reports_lang_id_translator_id    (language_id, translator_id)
+#  tr8n_forum_reports_lang_id                  (language_id)
 #
 #++
 
@@ -47,10 +47,10 @@ class Tr8n::LanguageForumAbuseReport < ActiveRecord::Base
   attr_accessible :language_id, :translator_id, :language_forum_message_id, :reason
   attr_accessible :language, :translator, :language_forum_message
 
-  belongs_to :language,               :class_name => "Tr8n::Language"  
-  belongs_to :translator,             :class_name => "Tr8n::Translator"   
+  belongs_to :language,               :class_name => "Tr8n::Language"
+  belongs_to :translator,             :class_name => "Tr8n::Translator"
   belongs_to :language_forum_message, :class_name => "Tr8n::LanguageForumMessage"
-  
+
   alias :message :language_forum_message
-  
+
 end

@@ -27,15 +27,15 @@
 #
 #  id               INTEGER     not null, primary key
 #  translator_id    integer     not null
-#  language_id      integer     
+#  language_id      integer
 #  topic            text        not null
-#  created_at       datetime    
-#  updated_at       datetime    
+#  created_at       datetime
+#  updated_at       datetime
 #
 # Indexes
 #
-#  tr8n_forum_topics_translator_id    (translator_id) 
-#  tr8n_forum_topics_lang_id          (language_id) 
+#  tr8n_forum_topics_translator_id    (translator_id)
+#  tr8n_forum_topics_lang_id          (language_id)
 #
 #++
 
@@ -44,14 +44,14 @@ class Tr8n::LanguageForumTopic < ActiveRecord::Base
 
   attr_accessible :translator_id, :language_id, :topic
   attr_accessible :language, :translator
-  
-  belongs_to :language, :class_name => "Tr8n::Language"    
-  belongs_to :translator, :class_name => "Tr8n::Translator"    
-  
+
+  belongs_to :language, :class_name => "Tr8n::Language"
+  belongs_to :translator, :class_name => "Tr8n::Translator"
+
   has_many :language_forum_messages, :class_name => "Tr8n::LanguageForumMessage", :dependent => :destroy
-  
+
   alias :messages :language_forum_messages
-  
+
   def post_count
     @post_count ||= Tr8n::LanguageForumMessage.where("language_forum_topic_id = ?", self.id).count
   end

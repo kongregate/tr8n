@@ -27,41 +27,41 @@
 #
 #  id                       INTEGER     not null, primary key
 #  translator_id            integer     not null
-#  language_id              integer     
+#  language_id              integer
 #  total_translations       integer     default = 0
 #  total_votes              integer     default = 0
 #  positive_votes           integer     default = 0
 #  negative_votes           integer     default = 0
 #  accepted_translations    integer     default = 0
 #  rejected_translations    integer     default = 0
-#  created_at               datetime    
-#  updated_at               datetime    
+#  created_at               datetime
+#  updated_at               datetime
 #
 # Indexes
 #
-#  index_tr8n_translator_metrics_on_created_at                       (created_at) 
-#  index_tr8n_translator_metrics_on_translator_id_and_language_id    (translator_id, language_id) 
-#  index_tr8n_translator_metrics_on_translator_id                    (translator_id) 
+#  index_tr8n_translator_metrics_on_created_at                       (created_at)
+#  index_tr8n_translator_metrics_on_translator_id_and_language_id    (translator_id, language_id)
+#  index_tr8n_translator_metrics_on_translator_id                    (translator_id)
 #
 #++
 
 class Tr8n::TranslatorMetric < ActiveRecord::Base
   self.table_name = :tr8n_translator_metrics
-  
+
   attr_accessible :translator_id, :language_id, :total_translations, :total_votes, :positive_votes, :negative_votes, :accepted_translations, :rejected_translations
   attr_accessible :translator, :language
 
   belongs_to :translator, :class_name => "Tr8n::Translator"
   belongs_to :language, :class_name => "Tr8n::Language"
-  
+
   def self.find_or_create(translator, language = nil)
     tm = where("translator_id = ?", translator.id)
     tm = where("language_id = ?", language.id) if language
     return tm.first if tm.first
-    
+
     create(:translator => translator, :language => language, :total_translations => 0, :total_votes => 0, :positive_votes => 0, :negative_votes => 0)
   end
-  
+
   # updated when an action is done by the translator
   def update_metrics!
     if language
@@ -75,10 +75,10 @@ class Tr8n::TranslatorMetric < ActiveRecord::Base
       self.positive_votes = Tr8n::TranslationVote.where("translator_id = ? and vote > 0", translator.id).count
       self.negative_votes = self.total_votes - self.positive_votes
     end
-    
+
     save
   end
-  
+
   # updated when an action is done to the translator's translations
   def update_rank!
     if language
@@ -88,15 +88,15 @@ class Tr8n::TranslatorMetric < ActiveRecord::Base
       self.accepted_translations = Tr8n::Translation.where("translator_id = ? and rank >= ?", translator.id, Tr8n::Config.translation_threshold).count
       self.rejected_translations = Tr8n::Translation.where("translator_id = ? and rank < ?", translator.id, 0).count
     end
-    
+
     save
-  end  
-  
-  def rank 
+  end
+
+  def rank
     return 0 unless total_translations and accepted_translations
     total_translations == 0 ? 0 : (accepted_translations * 100.0/total_translations)
   end
-  
+
   def pending_vote_translations
     return total_translations unless accepted_translations and rejected_translations
     total_translations - accepted_translations - rejected_translations

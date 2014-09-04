@@ -29,28 +29,28 @@
 #  translation_id    integer     not null
 #  translator_id     integer     not null
 #  vote              integer     not null
-#  created_at        datetime    
-#  updated_at        datetime    
+#  created_at        datetime
+#  updated_at        datetime
 #
 # Indexes
 #
-#  tr8n_trans_votes_trans_id_translator_id    (translation_id, translator_id) 
-#  tr8n_trans_votes_translator_id             (translator_id) 
+#  tr8n_trans_votes_trans_id_translator_id    (translation_id, translator_id)
+#  tr8n_trans_votes_translator_id             (translator_id)
 #
 #++
 
 class Tr8n::TranslationVote < ActiveRecord::Base
   self.table_name = :tr8n_translation_votes
-  
+
   attr_accessible :translation_id, :translator_id, :vote
   attr_accessible :translation, :translator
 
   belongs_to :translation,  :class_name => "Tr8n::Translation"
   belongs_to :translator,   :class_name => "Tr8n::Translator"
-    
+
   def self.find_or_create(translation, translator)
     vote = where("translation_id = ? and translator_id = ?", translation.id, translator.id).first
     vote ||= create(:translation => translation, :translator => translator, :vote => 0)
   end
-  
+
 end

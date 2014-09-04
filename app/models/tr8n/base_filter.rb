@@ -26,17 +26,17 @@
 # Table name: will_filter_filters
 #
 #  id                  INTEGER         not null, primary key
-#  type                varchar(255)    
-#  name                varchar(255)    
-#  data                text            
-#  user_id             integer         
-#  model_class_name    varchar(255)    
-#  created_at          datetime        
-#  updated_at          datetime        
+#  type                varchar(255)
+#  name                varchar(255)
+#  data                text
+#  user_id             integer
+#  model_class_name    varchar(255)
+#  created_at          datetime
+#  updated_at          datetime
 #
 # Indexes
 #
-#  index_will_filter_filters_on_user_id    (user_id) 
+#  index_will_filter_filters_on_user_id    (user_id)
 #
 #++
 
@@ -77,13 +77,13 @@ class Tr8n::BaseFilter < WillFilter::Filter
     return [:created_at, :is_on, Date.today] if (key == "created_today")
     return [:updated_at, :is_on, Date.today] if (key == "updated_today")
   end
-  
+
   def default_order
     'created_at'
   end
-  
+
   def default_order_type
     'desc'
   end
-  
+
 end

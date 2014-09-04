@@ -28,27 +28,27 @@
 #  id                      INTEGER         not null, primary key
 #  locale                  varchar(255)    not null
 #  english_name            varchar(255)    not null
-#  native_name             varchar(255)    
-#  enabled                 boolean         
-#  right_to_left           boolean         
-#  completeness            integer         
-#  fallback_language_id    integer         
-#  curse_words             text            
+#  native_name             varchar(255)
+#  enabled                 boolean
+#  right_to_left           boolean
+#  completeness            integer
+#  fallback_language_id    integer
+#  curse_words             text
 #  featured_index          integer         default = 0
-#  google_key              varchar(255)    
-#  facebook_key            varchar(255)    
-#  created_at              datetime        
-#  updated_at              datetime        
+#  google_key              varchar(255)
+#  facebook_key            varchar(255)
+#  created_at              datetime
+#  updated_at              datetime
 #
 # Indexes
 #
-#  index_tr8n_languages_on_locale    (locale) 
+#  index_tr8n_languages_on_locale    (locale)
 #
 #++
 
 class Tr8n::Language < ActiveRecord::Base
   self.table_name = :tr8n_languages
-  
+
   attr_accessible :locale, :english_name, :native_name, :enabled, :right_to_left, :completenss, :fallback_language_id, :curse_words, :featured_index, :google_key, :facebook_key
   attr_accessible :fallback_language
 
@@ -56,14 +56,14 @@ class Tr8n::Language < ActiveRecord::Base
   after_destroy   :update_cache
 
   belongs_to :fallback_language,    :class_name => 'Tr8n::Language', :foreign_key => :fallback_language_id
-  
+
   has_many :language_rules,         :class_name => 'Tr8n::LanguageRule',        :dependent => :destroy, :order => "type asc"
   has_many :language_cases,         :class_name => 'Tr8n::LanguageCase',        :dependent => :destroy, :order => "id asc"
   has_many :language_users,         :class_name => 'Tr8n::LanguageUser',        :dependent => :destroy
   has_many :translations,           :class_name => 'Tr8n::Translation',         :dependent => :destroy
   has_many :translation_key_locks,  :class_name => 'Tr8n::TranslationKeyLock',  :dependent => :destroy
   has_many :language_metrics,       :class_name => 'Tr8n::LanguageMetric'
-  
+
   def self.cache_key(locale)
     "language_#{locale}"
   end
@@ -71,7 +71,7 @@ class Tr8n::Language < ActiveRecord::Base
   def cache_key
     self.class.cache_key(locale)
   end
-  
+
   def self.for(locale)
     return nil if locale.nil?
     Tr8n::Cache.fetch(cache_key(locale)) do
@@ -81,17 +81,17 @@ class Tr8n::Language < ActiveRecord::Base
   end
 
   def self.find_or_create(lcl, english_name)
-    find_by_locale(lcl) || create(:locale => lcl, :english_name => english_name) 
+    find_by_locale(lcl) || create(:locale => lcl, :english_name => english_name)
   end
 
   def rules
-    Tr8n::Cache.fetch("language_rules_#{locale}") do 
+    Tr8n::Cache.fetch("language_rules_#{locale}") do
       language_rules
     end
   end
 
   def cases
-    Tr8n::Cache.fetch("language_cases_#{locale}") do 
+    Tr8n::Cache.fetch("language_cases_#{locale}") do
       language_cases
     end
   end
@@ -100,7 +100,7 @@ class Tr8n::Language < ActiveRecord::Base
     reset_language_rules!
     reset_language_cases!
   end
-  
+
   # reloads rules for the language from the yml file
   def reset_language_rules!
     rules.delete_all
@@ -110,7 +110,7 @@ class Tr8n::Language < ActiveRecord::Base
       end
     end
   end
-  
+
   # reloads language cases for the language from the yml file
   def reset_language_cases!
     cases.delete_all
@@ -124,19 +124,19 @@ class Tr8n::Language < ActiveRecord::Base
       end
     end
   end
-  
+
   def current?
     self.locale == Tr8n::Config.current_language.locale
   end
-  
+
   def default?
     self.locale == Tr8n::Config.default_locale
   end
-  
+
   def flag
     locale
   end
-  
+
   # deprecated
   def has_rules?
     rules?
@@ -145,10 +145,10 @@ class Tr8n::Language < ActiveRecord::Base
   def rules?
     not rules.empty?
   end
-  
+
   def gender_rules?
     return false unless rules?
-    
+
     rules.each do |rule|
       return true if rule.class.dependency == 'gender'
     end
@@ -161,26 +161,26 @@ class Tr8n::Language < ActiveRecord::Base
 
   def case_keyword_maps
     @case_keyword_maps ||= begin
-      hash = {} 
-      cases.each do |lcase| 
+      hash = {}
+      cases.each do |lcase|
         hash[lcase.keyword] = lcase
       end
       hash
     end
   end
-  
+
   def suggestible?
     not google_key.blank?
   end
-  
+
   def case_for(case_keyword)
     case_keyword_maps[case_keyword]
   end
-  
+
   def valid_case?(case_keyword)
     case_for(case_keyword) != nil
   end
-  
+
   def full_name
     return english_name if english_name == native_name
     "#{english_name} - #{native_name}"
@@ -189,7 +189,7 @@ class Tr8n::Language < ActiveRecord::Base
   def self.options
     enabled_languages.collect{|lang| [lang.english_name, lang.id.to_s]}
   end
-  
+
   def self.locale_options
     enabled_languages.collect{|lang| [lang.english_name, lang.locale]}
   end
@@ -197,7 +197,7 @@ class Tr8n::Language < ActiveRecord::Base
   def self.filter_options
     find(:all, :order => "english_name asc").collect{|lang| [lang.english_name, lang.id.to_s]}
   end
-  
+
   def enable!
     self.enabled = true
     save
@@ -207,23 +207,23 @@ class Tr8n::Language < ActiveRecord::Base
     self.enabled = false
     save
   end
-  
+
   def disabled?
     not enabled?
   end
-  
+
   def dir
     right_to_left? ? "rtl" : "ltr"
   end
-  
+
   def self.enabled_languages
-    Tr8n::Cache.fetch("enabled_languages") do 
+    Tr8n::Cache.fetch("enabled_languages") do
       find(:all, :conditions => ["enabled = ?", true], :order => "english_name asc")
     end
   end
 
   def self.featured_languages
-    Tr8n::Cache.fetch("featured_languages") do 
+    Tr8n::Cache.fetch("featured_languages") do
       find(:all, :conditions => ["enabled = ? and featured_index is not null and featured_index > 0", true], :order => "featured_index desc")
     end
   end
@@ -258,16 +258,16 @@ class Tr8n::Language < ActiveRecord::Base
   def default_rule
     @default_rule ||= Tr8n::Config.language_rule_classes.first.new(:language => self, :definition => {})
   end
-  
-  def rule_classes  
+
+  def rule_classes
     @rule_classes ||= rules.collect{|r| r.class}.uniq
   end
 
-  def rule_class_names  
+  def rule_class_names
     @rule_class_names ||= rule_classes.collect{|r| r.name}
   end
 
-  def dependencies  
+  def dependencies
     @dependencies ||= rule_classes.collect{|r| r.dependency}.uniq
   end
 
@@ -305,7 +305,7 @@ class Tr8n::Language < ActiveRecord::Base
   def prohibited_words
     return [] if curse_words.blank?
     @prohibited_words ||= begin
-      wrds = self.curse_words.split(",").collect{|w| w.strip.downcase} 
+      wrds = self.curse_words.split(",").collect{|w| w.strip.downcase}
       wrds << fallback_language.prohibited_words if fallback_language
       wrds.flatten.uniq
     end
@@ -321,14 +321,14 @@ class Tr8n::Language < ActiveRecord::Base
       wrds.flatten.uniq
     end
   end
-  
+
   def bad_words
     @bad_words ||= begin
       bw = prohibited_words + Tr8n::Config.default_language.prohibited_words
       bw.flatten.uniq - accepted_prohibited_words
     end
   end
-  
+
   def clean_sentence?(sentence)
     return true if sentence.blank?
 
@@ -338,14 +338,14 @@ class Tr8n::Language < ActiveRecord::Base
     bad_words.each do |w|
       return false unless sentence.scan(/#{w}/).empty?
     end
-    
+
     true
   end
 
   def translations_changed!
     # TODO: handle change event - count translations, update total metrics
   end
-  
+
   def update_cache
     Tr8n::Cache.delete(cache_key)
     Tr8n::Cache.delete("language_rules_#{locale}")
@@ -355,11 +355,11 @@ class Tr8n::Language < ActiveRecord::Base
   end
 
   def recently_added_forum_messages
-    @recently_added_forum_messages ||= Tr8n::LanguageForumMessage.where("language_id = ?", self.id).order("created_at desc").limit(5)    
+    @recently_added_forum_messages ||= Tr8n::LanguageForumMessage.where("language_id = ?", self.id).order("created_at desc").limit(5)
   end
 
   def recently_added_translations
-    @recently_added_translations ||= Tr8n::Translation.where("language_id = ?", self.id).order("created_at desc").limit(5)    
+    @recently_added_translations ||= Tr8n::Translation.where("language_id = ?", self.id).order("created_at desc").limit(5)
   end
 
   def recently_updated_translations
@@ -369,9 +369,9 @@ class Tr8n::Language < ActiveRecord::Base
       trans.order("updated_at desc").limit(5)
     end
   end
-  
+
   def recently_updated_votes(translator = Tr8n::Config.current_translator)
     @recently_updated_votes ||= Tr8n::TranslationVote.where("translation_id in (select tr8n_translations.id from tr8n_translations where tr8n_translations.language_id = ? and tr8n_translations.translator_id = ?)", self.id, translator.id).order("updated_at desc").limit(5)
   end
-  
+
 end

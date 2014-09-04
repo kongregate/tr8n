@@ -30,14 +30,14 @@
 #  language_forum_topic_id    integer     not null
 #  translator_id              integer     not null
 #  message                    text        not null
-#  created_at                 datetime    
-#  updated_at                 datetime    
+#  created_at                 datetime
+#  updated_at                 datetime
 #
 # Indexes
 #
-#  tr8n_forum_msgs_lang_id_topic_id    (language_id, language_forum_topic_id) 
-#  tr8n_forums_msgs_translator_id      (translator_id) 
-#  tr8n_forum_msgs_lang_id             (language_id) 
+#  tr8n_forum_msgs_lang_id_topic_id    (language_id, language_forum_topic_id)
+#  tr8n_forums_msgs_translator_id      (translator_id)
+#  tr8n_forum_msgs_lang_id             (language_id)
 #
 #++
 
@@ -47,10 +47,10 @@ class Tr8n::LanguageForumMessage < ActiveRecord::Base
   attr_accessible :language_id, :language_forum_topic_id, :translator_id, :message
   attr_accessible :language, :translator, :language_forum_topic
 
-  belongs_to :language,               :class_name => "Tr8n::Language"  
-  belongs_to :translator,             :class_name => "Tr8n::Translator"  
+  belongs_to :language,               :class_name => "Tr8n::Language"
+  belongs_to :translator,             :class_name => "Tr8n::Translator"
   belongs_to :language_forum_topic,   :class_name => "Tr8n::LanguageForumTopic"
-  
+
   has_many :language_forum_abuse_reports, :class_name => "Tr8n::LanguageForumAbuseReport", :dependent => :destroy
 
   alias :topic :language_forum_topic
@@ -61,7 +61,7 @@ class Tr8n::LanguageForumMessage < ActiveRecord::Base
     translator.update_attributes(:reported => true)
     report
   end
-  
+
   def toHTML
     return "" unless message
     ERB::Util.html_escape(message).gsub("\n", "<br>")

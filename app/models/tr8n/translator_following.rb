@@ -26,15 +26,15 @@
 # Table name: tr8n_translator_following
 #
 #  id               INTEGER         not null, primary key
-#  translator_id    integer         
-#  object_id        integer         
-#  object_type      varchar(255)    
-#  created_at       datetime        
-#  updated_at       datetime        
+#  translator_id    integer
+#  object_id        integer
+#  object_type      varchar(255)
+#  created_at       datetime
+#  updated_at       datetime
 #
 # Indexes
 #
-#  index_tr8n_translator_following_on_translator_id    (translator_id) 
+#  index_tr8n_translator_following_on_translator_id    (translator_id)
 #
 #++
 
@@ -44,7 +44,7 @@ class Tr8n::TranslatorFollowing < ActiveRecord::Base
   attr_accessible :translator_id, :object_id, :object_type
   attr_accessible :translator, :object
 
-  belongs_to :translator, :class_name => "Tr8n::Translator"   
+  belongs_to :translator, :class_name => "Tr8n::Translator"
   belongs_to :object, :polymorphic => true
 
   def self.find_or_create(translator, object)
@@ -54,5 +54,5 @@ class Tr8n::TranslatorFollowing < ActiveRecord::Base
   def self.following_for(translator, object)
     where("translator_id = ? and object_type = ? and object_id = ?", translator.id, object.class.name, object.id).first
   end
-  
+
 end

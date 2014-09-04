@@ -26,14 +26,14 @@
 # Table name: tr8n_translation_sources
 #
 #  id                       INTEGER         not null, primary key
-#  source                   varchar(255)    
-#  translation_domain_id    integer         
-#  created_at               datetime        
-#  updated_at               datetime        
+#  source                   varchar(255)
+#  translation_domain_id    integer
+#  created_at               datetime
+#  updated_at               datetime
 #
 # Indexes
 #
-#  tr8n_sources_source    (source) 
+#  tr8n_sources_source    (source)
 #
 #++
 
@@ -44,17 +44,17 @@ class Tr8n::TranslationSource < ActiveRecord::Base
   attr_accessible :translation_domain
 
   after_destroy   :clear_cache
-  
+
   belongs_to  :translation_domain,            :class_name => "Tr8n::TranslationDomain"
-  
+
   has_many    :translation_key_sources,       :class_name => "Tr8n::TranslationKeySource",  :dependent => :destroy
   has_many    :translation_keys,              :class_name => "Tr8n::TranslationKey",        :through => :translation_key_sources
   has_many    :translation_source_languages,  :class_name => "Tr8n::TranslationSourceLanguage"
-  
+
   alias :domain   :translation_domain
   alias :sources  :translation_key_sources
   alias :keys     :translation_keys
-  
+
   def self.cache_key(source)
     "translation_source_#{source}"
   end
@@ -64,17 +64,17 @@ class Tr8n::TranslationSource < ActiveRecord::Base
   end
 
   def self.find_or_create(source, url = nil)
-    Tr8n::Cache.fetch(cache_key(source)) do 
+    Tr8n::Cache.fetch(cache_key(source)) do
       translation_domain = Tr8n::TranslationDomain.find_or_create(url)
       translation_source = where("source = ? and translation_domain_id = ?", source, translation_domain.id).first
       translation_source ||= create(:source => source, :translation_domain => translation_domain)
       translation_source.update_attributes(:translation_domain => translation_domain) unless translation_source.translation_domain
       translation_source
-    end  
+    end
   end
 
   def clear_cache
     Tr8n::Cache.delete(cache_key)
   end
-  
+
 end

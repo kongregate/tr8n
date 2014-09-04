@@ -26,19 +26,19 @@
 # Table name: tr8n_glossary
 #
 #  id             INTEGER         not null, primary key
-#  keyword        varchar(255)    
-#  description    text            
-#  created_at     datetime        
-#  updated_at     datetime        
+#  keyword        varchar(255)
+#  description    text
+#  created_at     datetime
+#  updated_at     datetime
 #
 # Indexes
 #
-#  index_tr8n_glossary_on_keyword    (keyword) 
+#  index_tr8n_glossary_on_keyword    (keyword)
 #
 #++
 
 class Tr8n::Glossary < ActiveRecord::Base
   self.table_name = :tr8n_glossary
   attr_accessible :keyword, :description
-  
+
 end

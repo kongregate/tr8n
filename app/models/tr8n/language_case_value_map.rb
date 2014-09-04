@@ -28,16 +28,16 @@
 #  id               INTEGER         not null, primary key
 #  keyword          varchar(255)    not null
 #  language_id      integer         not null
-#  translator_id    integer         
-#  map              text            
-#  reported         boolean         
-#  created_at       datetime        
-#  updated_at       datetime        
+#  translator_id    integer
+#  map              text
+#  reported         boolean
+#  created_at       datetime
+#  updated_at       datetime
 #
 # Indexes
 #
-#  index_tr8n_language_case_value_maps_on_translator_id              (translator_id) 
-#  index_tr8n_language_case_value_maps_on_keyword_and_language_id    (keyword, language_id) 
+#  index_tr8n_language_case_value_maps_on_translator_id              (translator_id)
+#  index_tr8n_language_case_value_maps_on_keyword_and_language_id    (keyword, language_id)
 #
 #++
 
@@ -49,30 +49,30 @@ class Tr8n::LanguageCaseValueMap < ActiveRecord::Base
 
   after_save :clear_cache
   after_destroy :clear_cache
-  
-  belongs_to :language, :class_name => "Tr8n::Language"   
-  belongs_to :translator, :class_name => "Tr8n::Translator"   
-  
+
+  belongs_to :language, :class_name => "Tr8n::Language"
+  belongs_to :translator, :class_name => "Tr8n::Translator"
+
   serialize :map
-  
+
   def self.by_language_and_keyword(language, keyword)
-    Tr8n::Cache.fetch("language_case_value_map_#{language.id}_#{keyword}") do 
+    Tr8n::Cache.fetch("language_case_value_map_#{language.id}_#{keyword}") do
       find_by_language_id_and_keyword_and_reported(language.id, keyword, false)
     end
   end
-  
+
   # add a better way to determine the gender dependency
   def gender_based?
     return false unless map
     map.each do |key, value|
-      return true if value.is_a?(Hash) 
+      return true if value.is_a?(Hash)
     end
     false
   end
-  
+
   def value_for(object, case_key)
     return unless map
-    
+
     # male female definition
     if map[case_key].is_a?(Hash)
       object_gender = Tr8n::GenderRule.gender_token_value(object)
@@ -81,32 +81,32 @@ class Tr8n::LanguageCaseValueMap < ActiveRecord::Base
       end
       return map[case_key]['male']
     end
-    
-    map[case_key] 
+
+    map[case_key]
   end
 
   def implied_value_for(case_key)
     return unless map
-    return gender_value_for(case_key, "male") if map[case_key].is_a?(Hash)   
+    return gender_value_for(case_key, "male") if map[case_key].is_a?(Hash)
     map[case_key]
   end
-  
+
   def gender_value_for(case_key, gender)
     return unless map
     return map[case_key] unless map[case_key].is_a?(Hash)
     map[case_key][gender]
   end
-  
+
   def save_with_log!(new_translator)
 #    new_translator.updated_language_case_values!(self)
 
     self.translator = new_translator
-    save  
+    save
   end
-  
+
   def destroy_with_log!(new_translator)
 #    new_translator.deleted_language_case_values!(self)
-    
+
     destroy
   end
 
@@ -114,7 +114,7 @@ class Tr8n::LanguageCaseValueMap < ActiveRecord::Base
     # new_translator.reported_language_case_values!(self)
 
     update_attributes(:reported => true)
-    self.translator.update_attributes(:reported => true) 
+    self.translator.update_attributes(:reported => true)
   end
 
   def clear_cache

@@ -28,20 +28,20 @@
 #  id                       INTEGER     not null, primary key
 #  translation_key_id       integer     not null
 #  translation_source_id    integer     not null
-#  details                  text        
-#  created_at               datetime    
-#  updated_at               datetime    
+#  details                  text
+#  created_at               datetime
+#  updated_at               datetime
 #
 # Indexes
 #
-#  tr8n_trans_keys_source_id    (translation_source_id) 
-#  tr8n_trans_keys_key_id       (translation_key_id) 
+#  tr8n_trans_keys_source_id    (translation_source_id)
+#  tr8n_trans_keys_key_id       (translation_key_id)
 #
 #++
 
 class Tr8n::TranslationKeySource < ActiveRecord::Base
   self.table_name = :tr8n_translation_key_sources
-  
+
   attr_accessible :translation_key_id, :translation_source_id, :details
   attr_accessible :translation_source, :translation_key
 
@@ -64,27 +64,27 @@ class Tr8n::TranslationKeySource < ActiveRecord::Base
   end
 
   def self.find_or_create(translation_key, translation_source)
-    Tr8n::Cache.fetch(cache_key(translation_key.id, translation_source.id)) do 
+    Tr8n::Cache.fetch(cache_key(translation_key.id, translation_source.id)) do
       tks = where("translation_key_id = ? and translation_source_id = ?", translation_key.id, translation_source.id).first
       tks ||= begin
         translation_source.touch
         create(:translation_key => translation_key, :translation_source => translation_source)
       end
-    end  
+    end
   end
-  
+
   def update_details!(options)
     return unless options[:caller_key]
-    
+
     self.details ||= {}
     return if details[options[:caller_key]]
-    
+
     details[options[:caller_key]] = options[:caller]
     save
   end
-  
+
   def clear_cache
     Tr8n::Cache.delete(cache_key)
   end
-  
+
 end
