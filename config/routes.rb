@@ -24,19 +24,19 @@
 Tr8n::Engine.routes.draw do
   [:awards, :chart, :dashboard, :forum, :glossary, :help, :language_cases,
    :language, :phrases, :translations, :translator].each do |ctrl|
-    match "#{ctrl}(/:action)", :controller => "#{ctrl}"
+    match "#{ctrl}(/:action)", :controller => "#{ctrl}", via: [:get, :post]
   end
-  
-  [:chart, :clientsdk, :forum, :glossary, :language, :translation, 
+
+  [:chart, :clientsdk, :forum, :glossary, :language, :translation,
    :translation_key, :translator, :domain, :metrics].each do |ctrl|
-    match "admin/#{ctrl}(/:action)", :controller => "admin/#{ctrl}"
+    match "admin/#{ctrl}(/:action)", :controller => "admin/#{ctrl}", via: [:get, :post]
   end
-  
+
   [:application, :language, :translation, :translator].each do |ctrl|
-    match "api/v1/#{ctrl}(/:action)", :controller => "api/v1/#{ctrl}"
+    match "api/v1/#{ctrl}(/:action)", :controller => "api/v1/#{ctrl}", via: [:get, :post]
   end
-  
-  match "api/v1/language/translate.js", :controller => "api/v1/language", :action => "translate"
+
+  match "api/v1/language/translate.js", :controller => "api/v1/language", :action => "translate", via: [:get, :post]
 
   namespace :tr8n do
     root :to => "dashboard#index"
@@ -44,6 +44,6 @@ Tr8n::Engine.routes.draw do
       root :to => "language#index"
     end
   end
-  
+
   root :to => "dashboard#index"
 end
