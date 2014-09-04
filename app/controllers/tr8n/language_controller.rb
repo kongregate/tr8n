@@ -281,20 +281,36 @@ module Tr8n
     end
   
     def lb_language_case_rule
-      @case = Tr8n::LanguageCase.new(params[:case])
+      @case = Tr8n::LanguageCase.new(language_case_params)
       @rule_index = params[:rule_index]
     
       if params[:case_action].index("add_rule_at")
         @rule = Tr8n::LanguageCaseRule.new(:definition => {})
         @new_rule = true
       else
-        @rule = Tr8n::LanguageCaseRule.new(params[:rule])
+        @rule = Tr8n::LanguageCaseRule.new(language_case_rule_params)
       end
     
       render :layout => false
     end
   
   private
+
+    def language_case_params
+      permit_language_case_params(params.require(:case))
+    end
+
+    def permit_language_case_params(params)
+      params.permit(:language_id, :translator_id, :keyword, :latin_name, :native_name, :description, :application)
+    end
+
+    def language_case_rule_params
+      permit_language_case_rule_params(params.require(:rule))
+    end
+
+    def permit_language_case_rule_params(params)
+      params.permit(:language_case_id, :language_id, :translator_id, :definition, :position)
+    end
 
     # parse with safety - we don't want to disconnect existing translations from those rules
     def parse_language_rules
@@ -337,14 +353,14 @@ module Tr8n
       case_index = 0  
       while params[:cases]["#{case_index}"]
         case_rules = params[:cases]["#{case_index}"].delete("rules")
-        lcase = Tr8n::LanguageCase.new(params[:cases]["#{case_index}"])
+        lcase = Tr8n::LanguageCase.new(permit_language_case_params(params[:cases]["#{case_index}"]))
         rules = []
       
         if case_rules
           rule_index = 0
           while case_rules["#{rule_index}"]
             rule_data = case_rules["#{rule_index}"].merge(:id => nil, :language_case => lcase, :language => tr8n_current_language, :translator => tr8n_current_translator, :position => rule_index)
-            rules << Tr8n::LanguageCaseRule.new(rule_data)
+            rules << Tr8n::LanguageCaseRule.new(permit_language_case_rule_params(rule_data))
             rule_index += 1
           end
         end
