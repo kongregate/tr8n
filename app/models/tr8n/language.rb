@@ -54,8 +54,8 @@ class Tr8n::Language < ActiveRecord::Base
 
   belongs_to :fallback_language,    :class_name => 'Tr8n::Language', :foreign_key => :fallback_language_id
 
-  has_many :language_rules,         :class_name => 'Tr8n::LanguageRule',        :dependent => :destroy, :order => "type asc"
-  has_many :language_cases,         :class_name => 'Tr8n::LanguageCase',        :dependent => :destroy, :order => "id asc"
+  has_many :language_rules, -> { order('type') },        :class_name => 'Tr8n::LanguageRule',        :dependent => :destroy
+  has_many :language_cases, -> { order('id') },         :class_name => 'Tr8n::LanguageCase',        :dependent => :destroy
   has_many :language_users,         :class_name => 'Tr8n::LanguageUser',        :dependent => :destroy
   has_many :translations,           :class_name => 'Tr8n::Translation',         :dependent => :destroy
   has_many :translation_key_locks,  :class_name => 'Tr8n::TranslationKeyLock',  :dependent => :destroy
