@@ -61,8 +61,8 @@ class Tr8n::Translator < ActiveRecord::Base
 
   belongs_to :user, :class_name => Tr8n::Config.user_class_name, :foreign_key => :user_id
 
-  has_many  :translator_logs,               :class_name => "Tr8n::TranslatorLog",             :dependent => :destroy, :order => "created_at desc"
-  has_many  :translator_following,          :class_name => "Tr8n::TranslatorFollowing",       :dependent => :destroy, :order => "created_at desc"
+  has_many  :translator_logs, -> { order('created_at desc') },               :class_name => "Tr8n::TranslatorLog",             :dependent => :destroy
+  has_many  :translator_following, -> { order('created_at desc') },          :class_name => "Tr8n::TranslatorFollowing",       :dependent => :destroy
   has_many  :translator_metrics,            :class_name => "Tr8n::TranslatorMetric",          :dependent => :destroy
   has_many  :translations,                  :class_name => "Tr8n::Translation",               :dependent => :destroy
   has_many  :translation_votes,             :class_name => "Tr8n::TranslationVote",           :dependent => :destroy
