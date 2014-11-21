@@ -275,7 +275,7 @@ class Tr8n::TranslationKey < ActiveRecord::Base
       translations = translations.where("language_id in (?)", [language].flatten.collect{|lang| lang.id})
     end
     translations = translations.where("rank >= ?", rank) if rank
-    translations.order("rank desc").all
+    translations.order('rank desc').to_a
   end
 
   # used by the inline popup dialog, we don't want to show blocked translations
