@@ -52,7 +52,8 @@ class Tr8n::LanguageCase < ActiveRecord::Base
 
   belongs_to :language, :class_name => "Tr8n::Language"
   belongs_to :translator, :class_name => "Tr8n::Translator"
-  has_many   :language_case_rules, :class_name => "Tr8n::LanguageCaseRule", :order => 'position asc', :dependent => :destroy
+  has_many   :language_case_rules,
+             -> { order(:position) }, class_name: 'Tr8n::LanguageCaseRule', dependent: :destroy
 
   serialize :definition
 
