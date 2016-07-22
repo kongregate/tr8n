@@ -1,6 +1,4 @@
 <% if Tr8n::Config.enabled? and not params[:disable_tr8n_js] %>
-  <%= tr8n_splash_screen_tag %>
-
   <% if Tr8n::Config.enable_software_keyboard? %>
     <script>
       VKI_default_layout = "<%=Tr8n::KeyboardMapping.current_1_49%>";
