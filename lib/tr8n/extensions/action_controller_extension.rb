@@ -24,7 +24,7 @@
 module Tr8n
   module ActionControllerExtension
     def self.included(base)
-      base.send(:include, InstanceMethods) 
+      base.send(:include, InstanceMethods)
       base.before_filter :init_tr8n
     end
 
@@ -43,7 +43,7 @@ module Tr8n
         end.collect do |l|
           l.first.downcase.gsub(/-[a-z]+$/i) { |x| x.upcase }
         end
-      rescue 
+      rescue
         []
       end
 
@@ -62,7 +62,7 @@ module Tr8n
           request.remote_ip
         end
       end
-      
+
       def tr8n_init_current_source
         "#{self.class.name.underscore.gsub("_controller", "")}/#{self.action_name}"
       rescue
@@ -71,13 +71,12 @@ module Tr8n
 
       def tr8n_init_current_locale
         eval(Tr8n::Config.current_locale_method)
-      # Kongregate:AG - for our needs we'll just comment out, but if we push this back, should only fall back if locale method is not specified
-      # rescue
-      #   # fallback to the default session based locale implementation
-      #   # choose the first language from the accepted languages header
-      #   session[:locale] = tr8n_user_preffered_locale unless session[:locale]
-      #   session[:locale] = params[:locale] if params[:locale]
-      #   session[:locale]
+      rescue NameError
+        # fallback to the default session based locale implementation
+        # choose the first language from the accepted languages header
+        session[:locale] = tr8n_user_preffered_locale unless session[:locale]
+        session[:locale] = params[:locale] if params[:locale]
+        session[:locale]
       end
 
       def tr8n_init_current_user
@@ -86,7 +85,7 @@ module Tr8n
           user ||= Tr8n::Translator.new
           return user
         end
-          
+
         eval(Tr8n::Config.current_user_method)
       rescue
         Tr8n::Logger.error("Site user integration is enabled, but #{Tr8n::Config.current_user_method} method is not defined")
@@ -96,12 +95,12 @@ module Tr8n
       def init_tr8n
         # initialize request thread variables
         Tr8n::Config.init(tr8n_init_current_locale, tr8n_init_current_user, tr8n_init_current_source)
-        
+
         # invalidate source for the current page
         # ACTUALLY... LET'S NOT! This query happens way too much and overloads our database
         # Tr8n::Cache.invalidate_source(Tr8n::Config.current_source)
 
-        # track user's last ip address  
+        # track user's last ip address
         if Tr8n::Config.enable_country_tracking? and Tr8n::Config.current_user_is_translator?
           Tr8n::Config.current_translator.update_last_ip(tr8n_request_remote_ip)
         end
@@ -111,7 +110,7 @@ module Tr8n
       # There are two ways to call the tr method
       #
       # tr(label, desc = "", tokens = {}, options = {})
-      # or 
+      # or
       # tr(label, {:desc => "", tokens => {},  ...})
       ############################################################
       def tr(label, desc = "", tokens = {}, options = {})
