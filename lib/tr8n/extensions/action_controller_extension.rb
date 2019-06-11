@@ -25,7 +25,7 @@ module Tr8n
   module ActionControllerExtension
     def self.included(base)
       base.send(:include, InstanceMethods)
-      base.before_filter :init_tr8n
+      base.before_action :init_tr8n
     end
 
     module InstanceMethods

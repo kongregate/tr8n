@@ -23,12 +23,12 @@
 
 class Tr8n::GlossaryController < Tr8n::BaseController
 
-  before_filter :validate_current_translator
-  
+  before_action :validate_current_translator
+
   def index
     @terms = Tr8n::Glossary.order("keyword asc")
     @terms = @terms.where("(keyword like ? or description like ?)", "%#{params[:search]}%", "%#{params[:search]}%") unless params[:search].blank?
     @terms = @terms.page(page).per(per_page)
   end
-    
+
 end
