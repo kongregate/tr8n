@@ -21,15 +21,19 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Fixnum
-
+module IntegerExtension
   def translate(desc = "", tokens = {}, options = {}, language = Tr8n::Config.current_language)
     to_s.translate(desc, tokens, options, language)
   end
   alias tr translate
-  
+
   def trl(desc = "", tokens = {}, options = {}, language = Tr8n::Config.current_language)
     to_s.trl(desc, tokens, options, language)
   end
+end
 
+if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.4.0')
+  Integer.send(:include, IntegerExtension)
+else
+  Fixnum.send(:include, IntegerExtension)
 end
