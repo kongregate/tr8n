@@ -95,9 +95,9 @@ private
 
   def sanitize_api_response(response)
     if Tr8n::Config.api[:response_encoding] == "xml"
-      render(:text => response.to_xml)
+      render(xml: response)
     else
-      render(:text => response.to_json)
+      render(json: response)
     end
   end
 
