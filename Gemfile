@@ -9,3 +9,6 @@ gemspec
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
 # Gems for a standalone instance only
+
+# gem 'byebug'
+# gem 'will_filter', git: 'ssh://git@github.com/kongregate/will_filter.git', branch: 'rails-5.0'

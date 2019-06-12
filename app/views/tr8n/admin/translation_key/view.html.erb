@@ -154,7 +154,7 @@
 	  <% @key.translation_key_comments[0..20].each_with_index do |comment, index| %>
 	    <tr>
 	      <td><%=comment.language.english_name%></td>
-	      <td><%=link_to(comment.translator.name, :controller => "/tr8n/admin/translator", :action => :view, :translator_id => comment.translator.id) if comment.translator %></td>
+	      <td><%=link_to(comment.translator.name, :controller => "/tr8n/admin/translator", :custom_action => :view, :translator_id => comment.translator.id) if comment.translator %></td>
 	      <td><%=comment.created_at%></td>
 	      <td><%=comment.toHTML%></td>
 	      <td style="text-align:right; width:50px">
@@ -192,7 +192,7 @@
     <% @key.translation_key_locks.each_with_index do |lock, index| %>
       <tr>
         <td><%=lock.language.english_name%></td>
-        <td><%=link_to(lock.translator.name, :controller => "/tr8n/admin/translator", :action => :view, :translator_id => lock.translator.id) if lock.translator %></td>
+        <td><%=link_to(lock.translator.name, :controller => "/tr8n/admin/translator", :custom_action => :view, :translator_id => lock.translator.id) if lock.translator %></td>
         <td><%=lock.updated_at%></td>
         <td><%=lock.locked?%></td>
       </tr>

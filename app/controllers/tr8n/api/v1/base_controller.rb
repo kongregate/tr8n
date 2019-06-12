@@ -25,6 +25,11 @@ class Tr8n::Api::V1::BaseController < ApplicationController
 
   before_action :check_api_enabled
 
+  def route_controller_action
+    self.action_name = params[:custom_action]
+    public_send(params[:custom_action])
+  end
+
   if Tr8n::Config.api_skip_before_filters.any?
     skip_before_action(*Tr8n::Config.api_skip_before_filters, raise: false)
   end

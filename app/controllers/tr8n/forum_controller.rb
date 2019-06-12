@@ -38,7 +38,7 @@ class Tr8n::ForumController < Tr8n::BaseController
       end
 
       Tr8n::LanguageForumMessage.create(:language_forum_topic => topic, :language_id => tr8n_current_language.id, :message => params[:message], :translator => tr8n_current_translator)
-      return redirect_to(:action => :topic, :topic_id => topic.id, :last_page => true)
+      return redirect_to(:custom_action => :topic, :topic_id => topic.id, :last_page => true)
     end
 
     unless params[:mode] == "create"
@@ -75,12 +75,12 @@ class Tr8n::ForumController < Tr8n::BaseController
 
     if message.translator != tr8n_current_translator
       trfe("You cannot delete messages you didn't post.")
-      redirect_to(:action => :topic, :topic_id => message.language_forum_topic.id)
+      redirect_to(:custom_action => :topic, :topic_id => message.language_forum_topic.id)
     end
 
     message.destroy
     trfn("The message has been removed")
-    redirect_to(:action => :topic, :topic_id => message.language_forum_topic.id)
+    redirect_to(:custom_action => :topic, :topic_id => message.language_forum_topic.id)
   end
 
   def report_message
@@ -94,7 +94,7 @@ class Tr8n::ForumController < Tr8n::BaseController
     message.submit_abuse_report(tr8n_current_translator)
 
     trfn("The message has been reported")
-    redirect_to(:action => :topic, :topic_id => message.language_forum_topic.id)
+    redirect_to(:custom_action => :topic, :topic_id => message.language_forum_topic.id)
   end
 
 end

@@ -11,7 +11,7 @@
 <tbody>
   <% rules.each do |rule| -%>
     <tr>
-      <td><%= link_to(rule.language.english_name, :action => :view,  :lang_id => rule.language.id) %></td>
+      <td><%= link_to(rule.language.english_name, :custom_action => :view,  :lang_id => rule.language.id) %></td>
       <td><%= rule.class.name %></td>
       <td><%= rule.description %></td>
       <td><%= rule.translator ? rule.translator.name : "System generated" %></td>

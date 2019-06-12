@@ -4,26 +4,26 @@
 
 <%= form_tag("", :id => "comments_form") do %>
   <%= will_filter_table_tag(@comments, :columns => [
-    [:checkbox, :comments],    
+    [:checkbox, :comments],
     [:language_id, lambda{|comment|
       if comment.language
-        link_to(comment.language.english_name, :controller => "/tr8n/admin/language", :action => :view, :lang_id => comment.language.id)
+        link_to(comment.language.english_name, :controller => "/tr8n/admin/language", :custom_action => :view, :lang_id => comment.language.id)
       else
-         "Deleted Language"    
-      end  
-    }], 
+         "Deleted Language"
+      end
+    }],
     [:translator_id, lambda{|comment|
       if comment.translator
-        link_to(comment.translator.name, :controller => "/tr8n/admin/translator", :action => :view, :translator_id => comment.translator.id) 
+        link_to(comment.translator.name, :controller => "/tr8n/admin/translator", :custom_action => :view, :translator_id => comment.translator.id)
       else
-         "Deleted Translator"    
-      end  
-    }], 
+         "Deleted Translator"
+      end
+    }],
     [:translation_key_id, lambda{|comment|
-      html = link_to(comment.key.label[0..30], :action => :view, :key_id => comment.key.id)
+      html = link_to(comment.key.label[0..30], :custom_action => :view, :key_id => comment.key.id)
       html << "..." if comment.key.label.length > 30
       html
-    }], 
+    }],
     [:message, lambda{|comment|
       comment.toHTML
     }], :created_at,
@@ -34,7 +34,7 @@
 <% end %>
 
 <%= will_filter_actions_bar_tag(@comments, [
-  ['Delete Selected Comments', 'deleteSelectedComments()'] 
+  ['Delete Selected Comments', 'deleteSelectedComments()']
 ]) %>
 
 <%= render :partial => "/tr8n/admin/common/footer" %>

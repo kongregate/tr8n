@@ -108,7 +108,7 @@ class Tr8n::PhrasesController < Tr8n::BaseController
     if params[:translation_has_dependencies] == "true" # comes from inline translator only
       @translation_key.generate_rule_permutations(tr8n_current_language, tr8n_current_translator, params[:dependencies])
       trfn("We have created all possible combinations of the values for the tokens. Please provide a translation for each combination.")
-      return redirect_to(:controller => "/tr8n/phrases", :action => :view, :translation_key_id => @translation_key.id, :submitted_by => :me, :submitted_on => :today)
+      return redirect_to(:controller => "/tr8n/phrases", :custom_action => :view, :translation_key_id => @translation_key.id, :submitted_by => :me, :submitted_on => :today)
     end
 
     if params[:translation_id].blank?
@@ -196,19 +196,19 @@ class Tr8n::PhrasesController < Tr8n::BaseController
       trfn("Your translation has been removed.")
     end
 
-    redirect_to(:action => :key, :translation_key_id => translation.translation_key.id, :section_key => @section_key)
+    redirect_to(:custom_action => :key, :translation_key_id => translation.translation_key.id, :section_key => @section_key)
   end
 
   def lock
     @translation_key = Tr8n::TranslationKey.find(params[:translation_key_id])
     @translation_key.lock!
-    redirect_to(:action => :view, :translation_key_id => @translation_key.id)
+    redirect_to(:custom_action => :view, :translation_key_id => @translation_key.id)
   end
 
   def unlock
     @translation_key = Tr8n::TranslationKey.find(params[:translation_key_id])
     @translation_key.unlock!
-    redirect_to(:action => :view, :translation_key_id => @translation_key.id)
+    redirect_to(:custom_action => :view, :translation_key_id => @translation_key.id)
   end
 
   def map

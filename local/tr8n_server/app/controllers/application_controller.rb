@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
     raise e
   end
 
+  def route_controller_action
+    self.action_name = params[:custom_action]
+    public_send(params[:custom_action])
+  end
+
   def current_user
     @current_user ||= (User.find_by_id(session[:user_id]) unless session[:user_id].blank?) || User.new
   end
@@ -20,12 +25,12 @@ class ApplicationController < ActionController::Base
 
   def logout!
     session[:user_id] = nil
-  end  
+  end
 
   def redirect_to_source
     return redirect_to(params[:source_url]) unless params[:source_url].blank?
     return redirect_to(request.env['HTTP_REFERER']) unless request.env['HTTP_REFERER'].blank?
     redirect_to_site_default_url
   end
-  
+
 end

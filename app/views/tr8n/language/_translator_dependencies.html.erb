@@ -1,4 +1,4 @@
-<%= form_for(@translation, :as => :translation, :url => {:controller => "/tr8n/translations", :action => :translate}, :html => {:id => 'tr8n_translator_form', :method => :post}) do |f| %>
+<%= form_for(@translation, :as => :translation, :url => {:controller => "/tr8n/translations", :custom_action => :translate}, :html => {:id => 'tr8n_translator_form', :method => :post}) do |f| %>
     <%= hidden_field_tag(:translation_key_id, @translation_key.id) %>
     <%= hidden_field_tag(:source_url, @source_url) %>
     <%= hidden_field_tag(:translation_has_dependencies, "true") %>
@@ -10,13 +10,13 @@
          <div class="small_section_title">
             <%=trla("Context Rules")%>
          </div>
-        
+
 	      <div style="padding-bottom:15px;">
 	        <%=render :partial => "/tr8n/common/permutations" %>
 	      </div>
 
         <%=link_to_function(trla("Click here if there are no context rules for this phrase"), "tr8nTranslator.switchTranslatorMode('#{@translation_key.id}', 'submit', '#{@source_url}')", :style => "font-size:10px;") %>
-     </div>      
+     </div>
     </div>
 <% end %>
 

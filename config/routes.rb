@@ -24,16 +24,19 @@
 Tr8n::Engine.routes.draw do
   [:awards, :chart, :dashboard, :forum, :glossary, :help, :language_cases,
    :language, :phrases, :translations, :translator].each do |ctrl|
-    match "#{ctrl}(/:action)", :controller => "#{ctrl}", via: [:get, :post, :put]
+    get "#{ctrl}", to: "#{ctrl}#index"
+    match "#{ctrl}/:custom_action", :controller => "#{ctrl}", action: :route_controller_action, via: [:get, :post, :put]
   end
 
   [:chart, :clientsdk, :forum, :glossary, :language, :translation,
    :translation_key, :translator, :domain, :metrics].each do |ctrl|
-    match "admin/#{ctrl}(/:action)", :controller => "admin/#{ctrl}", via: [:get, :post, :put]
+    get "#{ctrl}", to: "#{ctrl}#index"
+    match "admin/#{ctrl}/:custom_action", :controller => "admin/#{ctrl}", action: :route_controller_action, via: [:get, :post, :put]
   end
 
   [:application, :language, :translation, :translator].each do |ctrl|
-    match "api/v1/#{ctrl}(/:action)", :controller => "api/v1/#{ctrl}", via: [:get, :post, :put]
+    get "#{ctrl}", to: "#{ctrl}#index"
+    match "api/v1/#{ctrl}/:custom_action", :controller => "api/v1/#{ctrl}", action: :route_controller_action, via: [:get, :post, :put]
   end
 
   match "api/v1/language/translate.js", :controller => "api/v1/language", :action => "translate", via: [:get, :post, :put]

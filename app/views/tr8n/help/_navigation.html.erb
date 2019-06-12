@@ -5,27 +5,27 @@
   sections = [
     {:title => "Introduction", :sections => [
         {:title => "Welcome", :action => :index},
-    ]}, 
+    ]},
     {:title => "Translation Basics", :sections => [
-        {:title => "Creating Translations", :action => :creating_translations},
-        {:title => "Voting on Translations", :action => :voting_on_translations},
-        {:title => "Understanding Ranks", :action => :ranks},
-    ]}, 
+        {:title => "Creating Translations", :custom_action => :creating_translations},
+        {:title => "Voting on Translations", :custom_action => :voting_on_translations},
+        {:title => "Understanding Ranks", :custom_action => :ranks},
+    ]},
     {:title => "Translator Tools", :sections => [
-        {:title => "Language Selector", :action => :language_selector},
+        {:title => "Language Selector", :custom_action => :language_selector},
         {:title => "Inline Translator", :action => :inline_translator},
-        {:title => "Advanced Tools", :action => :advanced_tools, :sections => [
-          {:title => "Management", :action => :management},
-          {:title => "Dashboard", :action => :dashboard},
+        {:title => "Advanced Tools", :custom_action => :advanced_tools, :sections => [
+          {:title => "Management", :custom_action => :management},
+          {:title => "Dashboard", :custom_action => :dashboard},
           {:title => "Site Map", :action => :site_map},
-          {:title => "Phrases", :action => :phrases},
-          {:title => "Relationships", :action => :relationships},
-          {:title => "Translations", :action => :translations},
-          {:title => "Awards", :action => :awards},
-          {:title => "Discussions", :action => :discussions},
-          {:title => "Help", :action => :help},
+          {:title => "Phrases", :custom_action => :phrases},
+          {:title => "Relationships", :custom_action => :relationships},
+          {:title => "Translations", :custom_action => :translations},
+          {:title => "Awards", :custom_action => :awards},
+          {:title => "Discussions", :custom_action => :discussions},
+          {:title => "Help", :custom_action => :help},
         ]},
-    ]}, 
+    ]},
   ]
 %>
 
@@ -52,7 +52,7 @@
 .section_link a {
 	text-decoration:none;
 }
-	
+
 .section_link a:hover {
   text-decoration:none;
 }
@@ -74,7 +74,7 @@
 <%= form_tag({}, :id => "version_form", :method => :get) do %>
 <%=hidden_field_tag(:path, params[:path])%>
 <div class="documentation_sidebar">
-	
+
 	<% sections.each do |sec| %>
     <div class="navigation_header"><%=tr(sec[:title])%></div>
 		<% (sec[:sections] || []).each do |sec1| %>
@@ -82,9 +82,9 @@
 			<% if sec1[:sections] %>
 		    <% sec1[:sections].each do |sec2| %>
 	  	      <div style="padding-left:15px;" class="section_link <%="selected" if controller.action_name == sec2[:action].to_s %>"><%=link_to(tr(sec2[:title]), :action => sec2[:action])%></div>
-		    <% end %> 
-			<% end %> 
-		<% end %>	
+		    <% end %>
+			<% end %>
+		<% end %>
 	<% end %>
 
 </div>

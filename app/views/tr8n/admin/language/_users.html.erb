@@ -13,10 +13,10 @@
       Created At
     </th>
     <th style="width:50px"> </th>
-  </tr>  
+  </tr>
   <% users.each_with_index do |language_user, index| %>
     <tr>
-      <td><%=link_to(language_user.language.english_name, :action => :view, :lang_id => language_user.language.id)%></td>
+      <td><%=link_to(language_user.language.english_name, :custom_action => :view, :lang_id => language_user.language.id)%></td>
       <td>
         <% if language_user.user %>
           <%= Tr8n::Config.user_name(language_user.user) %> (<%= link_to(Tr8n::Config.user_id(language_user.user), Tr8n::Config.user_link(language_user.user)) %>)

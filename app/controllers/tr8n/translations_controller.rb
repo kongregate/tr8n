@@ -98,7 +98,7 @@ class Tr8n::TranslationsController < Tr8n::BaseController
       trfn("All possible combinations of the context rules for this phrase have been generated. Please provide a translation for each context rule.")
     end
 
-    redirect_to(:controller => "/tr8n/phrases", :action => :view, :translation_key_id => translation_key.id, :grouped_by => :context)
+    redirect_to(:controller => "/tr8n/phrases", :custom_action => :view, :translation_key_id => translation_key.id, :grouped_by => :context)
   end
 
   # ajax based method - collects votes for a translation
@@ -174,7 +174,7 @@ class Tr8n::TranslationsController < Tr8n::BaseController
       trfn("Your translation has been removed.")
     end
 
-    redirect_to(:controller => "/tr8n/phrases", :action => :view, :translation_key_id => translation.translation_key.id, :section_key => @section_key)
+    redirect_to(:controller => "/tr8n/phrases", :custom_action => :view, :translation_key_id => translation.translation_key.id, :section_key => @section_key)
   end
 
 private

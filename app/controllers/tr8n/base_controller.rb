@@ -26,6 +26,11 @@ module Tr8n
 
     layout Tr8n::Config.site_info[:tr8n_layout]
 
+    def route_controller_action
+      self.action_name = params[:custom_action]
+      public_send(params[:custom_action])
+    end
+
     if Tr8n::Config.tr8n_helpers.any?
       helper *Tr8n::Config.tr8n_helpers
     end

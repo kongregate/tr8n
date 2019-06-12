@@ -3,6 +3,11 @@ class Admin::BaseController < ApplicationController
 
   layout 'admin'
 
+  def route_controller_action
+    self.action_name = params[:custom_action]
+    public_send(params[:custom_action])
+  end
+
 private
 
   def verify_admin_user

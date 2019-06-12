@@ -2,15 +2,15 @@
   links = []
   current_tab ||= ""
   [["Topics", {:action => :index}],
-   ["Messages", {:action => :messages}],
-   ["Abuse Reports", {:action => :reports}]].each do |link|
+   ["Messages", {:custom_action => :messages}],
+   ["Abuse Reports", {:custom_action => :reports}]].each do |link|
       if controller.action_name == link.last[:action].to_s
         current_tab = link.first if current_tab.blank?
         links << link.first
       else
         links << link_to(link.first, link.last)
-      end 
-	 end   
+      end
+	 end
 %>
 
 <div class="section_title">

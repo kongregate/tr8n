@@ -7,12 +7,12 @@
     :created_at,
     [:translator_id, lambda{|report|
       if report.translator
-        link_to(report.translator.name, :controller => "/tr8n/admin/translator", :action => :view, :translator_id => report.translator.id)
+        link_to(report.translator.name, :controller => "/tr8n/admin/translator", :custom_action => :view, :translator_id => report.translator.id)
       else
-        "Unknown" 
-      end  
+        "Unknown"
+      end
     }],
-    :object_type, 
+    :object_type,
     :object_id,
     :reason,
     :comment
