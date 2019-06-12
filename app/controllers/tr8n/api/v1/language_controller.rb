@@ -70,7 +70,7 @@ class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
       end
 
       if params[:sdk_jsvar]
-        return render(:text => "#{params[:sdk_jsvar]}.updateTranslations(#{translations.to_json});", :content_type => "text/javascript")
+        return render(:plain => "#{params[:sdk_jsvar]}.updateTranslations(#{translations.to_json});", :content_type => "text/javascript")
       end
 
       return sanitize_api_response({:phrases => translations, :api => :translate})
