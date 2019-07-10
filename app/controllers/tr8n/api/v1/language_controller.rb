@@ -24,7 +24,7 @@
 class Tr8n::Api::V1::LanguageController < Tr8n::Api::V1::BaseController
 
   # for ssl access to the translator - using ssl_requirement plugin
-  ssl_allowed :translate  if respond_to?(:ssl_allowed)
+  ssl_allowed :route_controller_action, :translate if respond_to?(:ssl_allowed)
 
   # returns a list of all languages
   def index

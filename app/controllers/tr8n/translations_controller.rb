@@ -27,7 +27,7 @@ class Tr8n::TranslationsController < Tr8n::BaseController
   before_action :validate_default_language, :except => [:translate, :permutate, :vote]
 
   # for ssl access to the translator - using ssl_requirement plugin
-  ssl_allowed :translate  if respond_to?(:ssl_allowed)
+  ssl_allowed :route_controller_action, :translate if respond_to?(:ssl_allowed)
 
   # main translation method used by the translator and translation screens
   def translate

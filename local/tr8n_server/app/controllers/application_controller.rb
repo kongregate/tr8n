@@ -2,6 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  ssl_allowed :route_controller_action if respond_to?(:ssl_allowed)
   helper :all # include all helpers, all the time
 
   rescue_from StandardError do |e|

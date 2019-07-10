@@ -29,7 +29,7 @@ module Tr8n
     before_action :validate_language_management, :only => [:index]
 
     # for ssl access to the translator - using ssl_requirement plugin
-    ssl_allowed :translator, :select, :lists, :switch, :remove  if respond_to?(:ssl_allowed)
+    ssl_allowed :route_controller_action, :translator, :select, :lists, :switch, :remove if respond_to?(:ssl_allowed)
 
     def index
       @rules = rules_by_dependency(tr8n_current_language.rules)

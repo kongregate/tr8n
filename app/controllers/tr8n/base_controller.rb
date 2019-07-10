@@ -23,6 +23,8 @@
 
 module Tr8n
   class BaseController < ApplicationController
+    # for ssl access to the translator - using ssl_requirement plugin
+    ssl_allowed :route_controller_action if respond_to?(:ssl_allowed)
 
     layout Tr8n::Config.site_info[:tr8n_layout]
 

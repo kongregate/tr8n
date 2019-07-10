@@ -1,5 +1,6 @@
 class Admin::BaseController < ApplicationController
   before_action :verify_admin_user
+  ssl_allowed :route_controller_action if respond_to?(:ssl_allowed)
 
   layout 'admin'
 

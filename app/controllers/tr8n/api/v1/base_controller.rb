@@ -22,8 +22,10 @@
 #++
 
 class Tr8n::Api::V1::BaseController < ApplicationController
-
   before_action :check_api_enabled
+
+  # for ssl access to the translator - using ssl_requirement plugin
+  ssl_allowed :route_controller_action if respond_to?(:ssl_allowed)
 
   def route_controller_action
     self.action_name = params[:custom_action]
